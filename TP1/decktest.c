@@ -15,7 +15,12 @@ void DeckTest_InitEmpty ()
 //===============================================
 void DeckTest_AddCardAtEnd ()
 {
-	// TO DO
+	Deck d;
+	Deck_InitEmpty(&d);
+	Card c = {.rank = 1, .suit = 2};
+	Deck_AddCardAtEnd(&d, c);
+	assert(d.length == 1);
+	assert(d.cards[0].rank == 1 && d.cards[0].suit == 2);
 }
 
 //===============================================
@@ -43,7 +48,13 @@ void DeckTest_RemoveCardAtEnd ()
 //===============================================
 void DeckTest_InitFullSorted ()
 {
-	// TO DO
+	Deck d;
+	Deck_InitFullSorted(&d);
+  	for (Suit i = 0; i < NB_SUITS; i++) { // * i is the card's color
+    	for (int j = 1; j < NB_RANKS; j++) { // * j is the card's rank
+      		assert(d.cards[(i * NB_RANKS) + j].rank == d.cards[(i * NB_RANKS) + j - 1].rank + 1 && d.cards[(i * NB_RANKS) + j].suit == d.cards[(i * NB_RANKS) + j - 1].suit);
+		}
+	}
 }
 
 //===============================================
@@ -65,5 +76,9 @@ void DeckTest_Shuffle ()
 //===============================================
 void DeckTest_RunAll ()
 {
-	// TO DO
+	DeckTest_InitEmpty();
+	DeckTest_AddCardAtEnd();
+	DeckTest_RemoveCardAtEnd ();
+	DeckTest_InitFullSorted ();
+	DeckTest_Shuffle ();
 }

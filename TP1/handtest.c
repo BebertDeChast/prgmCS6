@@ -33,7 +33,11 @@ void HandTest_AddCard()
 //===============================================
 void HandTest_ContainsCard()
 {
-// TO DO
+	Hand h;
+	Hand_InitEmpty(&h);
+	Card c = {.rank = 1, .suit = 2};
+	Hand_AddCard(&h, c);
+	assert(Hand_ContainsCard(h, c));
 }
 
 //===============================================
@@ -55,7 +59,12 @@ void HandTest_GetCardIndex()
 //===============================================
 void HandTest_RemoveCard()
 {
-	// TO DO
+	Hand h;
+	Hand_InitEmpty(&h);
+	Card c = {.rank = 1, .suit = 2};
+	Hand_AddCard(&h, c);
+	Hand_RemoveCard(&h, c);
+	assert(!(Hand_ContainsCard(h, c)));
 }
 
 //===============================================
@@ -80,8 +89,13 @@ void HandTest_DrawFromDeck()
 //===============================================
 void HandTest_GetFullHand()
 {
-// TO DO
-
+	Hand h;
+	Deck d;
+	Deck_InitFullSorted(&d);
+	
+	Hand_InitEmpty(&h);
+	Hand_GetFullHand(&h, &d);
+	assert(h.length == NB_CARDS);
 }
 
 //===============================================
@@ -97,9 +111,11 @@ void HandTest_Sort()
 	Hand_AddCard(& h, Card_Make(HEART, 3));
 
 	Hand_Sort(& h);
-
-	// TO COMPLETE
-
+	assert(h.cards[0].rank == 1 && h.cards[0].suit == HEART);
+	assert(h.cards[1].rank == 2 && h.cards[1].suit == CLUB);
+	assert(h.cards[2].rank == 3 && h.cards[2].suit == HEART);
+	assert(h.cards[3].rank == 5 && h.cards[3].suit == DIAMOND);
+	assert(h.cards[4].rank == 8 && h.cards[4].suit == SPADE);
 }
 
 //===============================================
@@ -159,7 +175,8 @@ void HandTest_IsStraightFlush()
 //===============================================
 void HandTest_IsFourOfAKind()
 {
-  // TO DO
+  Hand withF;
+  Hand withoutF;
 }
 
 //===============================================
