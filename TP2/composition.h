@@ -4,7 +4,9 @@
 #include "expression.h"
 
 typedef struct Composition {
-// TO DO
+    Expression * expressions;
+    int capacity;
+    int length;
 } Composition;
 
 void Composition_InitEmpty(Composition *self);

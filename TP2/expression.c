@@ -8,27 +8,28 @@
 char Operator_ToChar(Operator oper) {
 switch (oper) {
   case (ADD):
-    return "+"; // * No break because the return stop the function anyway
+    return '+'; // * No break because the return stop the function anyway
   case (SUB):
-    return "-";
+    return '-';
   case (MULT):
-    return "*";
+    return '*';
   case (DIV):
-    return "/";
+    return '/';
   }
+  assert(false);
 }
 
 //===============================================
 Operator Operator_CharTo(char * c)
 {
   assert(c[1] == '\0'); // * Basically we first check that the string has only 1 letter
-  if (c == "+") {
+  if (* c == '+') {
     return ADD;
-  } else if (c == "-") {
+  } else if (* c == '-') {
     return SUB;
-  } else if (c == "*") {
+  } else if (* c == '*') {
     return MULT;
-  } else if (c == "/") {
+  } else if (* c == '/') {
     return DIV;
   }
   assert(false);
@@ -51,8 +52,10 @@ double Expression_Solve(Expression self) {
   case (MULT):
     return self.x * self.y;
   case (DIV):
+    assert(self.y != 0.0);
     return self.x/self.y;
   }
+  assert(false);
 }
 
 //===============================================
