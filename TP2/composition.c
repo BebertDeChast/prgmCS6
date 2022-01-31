@@ -7,7 +7,8 @@
 //===============================================
 void Composition_InitEmpty(Composition * self)
 {
-// TO DO}
+// TO DO
+}
 
 //===============================================
 void Composition_Alloc(Composition * self, int capacity)

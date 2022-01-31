@@ -11,8 +11,8 @@ Operator Operator_CharTo(char * c);
 
 typedef struct Expression {
     Operator op;
-    float x;
-    float y;
+    double x;
+    double y;
 } Expression;
 
 void Expression_Store(Expression * self, double number1, double number2, Operator oper);
