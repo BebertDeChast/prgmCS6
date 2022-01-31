@@ -1,0 +1,7 @@
+deck.o: deck.c card.h deck.h
+cardtest.o: cardtest.c card.h cardtest.h
+poker.o: poker.c hand.h card.h deck.h handtest.h cardtest.h decktest.h
+hand.o: hand.c card.h hand.h deck.h
+card.o: card.c card.h
+handtest.o: handtest.c hand.h card.h deck.h handtest.h
+decktest.o: decktest.c deck.h card.h decktest.h

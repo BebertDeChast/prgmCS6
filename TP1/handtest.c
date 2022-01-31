@@ -175,8 +175,26 @@ void HandTest_IsStraightFlush()
 //===============================================
 void HandTest_IsFourOfAKind()
 {
-  Hand withF;
-  Hand withoutF;
+  	Hand withF;
+  	Hand withoutF;
+
+  	Hand_InitEmpty(& withF);
+  	Hand_InitEmpty(& withoutF);
+
+  	Hand_AddCard(& withF, Card_Make(CLUB, 3));
+	Hand_AddCard(& withF, Card_Make(DIAMOND, 3));	
+	Hand_AddCard(& withF, Card_Make(HEART, 3));
+	Hand_AddCard(& withF, Card_Make(SPADE, 3));
+	Hand_AddCard(& withF, Card_Make(CLUB, 7));
+
+	Hand_AddCard(& withoutF, Card_Make(CLUB, 3));
+	Hand_AddCard(& withoutF, Card_Make(HEART, 1));	
+	Hand_AddCard(& withoutF, Card_Make(SPADE, 5));
+	Hand_AddCard(& withoutF, Card_Make(CLUB, 6));
+	Hand_AddCard(& withoutF, Card_Make(CLUB, 7));
+
+	assert(Hand_IsFourOfAKind(withF));
+	assert(!Hand_IsFourOfAKind(withoutF));
 }
 
 //===============================================
@@ -233,7 +251,44 @@ void HandTest_IsFlush()
 //===============================================
 void HandTest_IsStraight()
 {
-	// TO DO 
+	Hand straight;
+	Hand straight2;
+	Hand straight3;
+	Hand lgbt;
+
+	Hand_InitEmpty(& straight);
+	Hand_InitEmpty(& straight2);
+	Hand_InitEmpty(& straight3);
+	Hand_InitEmpty(& lgbt);
+
+	Hand_AddCard(& straight, Card_Make(CLUB, 1));
+	Hand_AddCard(& straight, Card_Make(CLUB, 2));	
+	Hand_AddCard(& straight, Card_Make(SPADE, 3));
+	Hand_AddCard(& straight, Card_Make(CLUB, 4));
+	Hand_AddCard(& straight, Card_Make(HEART, 5));
+
+	Hand_AddCard(& straight2, Card_Make(CLUB, 1));
+	Hand_AddCard(& straight2, Card_Make(CLUB, 2));	
+	Hand_AddCard(& straight2, Card_Make(CLUB, 3));
+	Hand_AddCard(& straight2, Card_Make(CLUB, 4));
+	Hand_AddCard(& straight2, Card_Make(CLUB, 5));
+
+	Hand_AddCard(& straight3, Card_Make(CLUB, 1));
+	Hand_AddCard(& straight3, Card_Make(CLUB, 2));	
+	Hand_AddCard(& straight3, Card_Make(SPADE, 3));
+	Hand_AddCard(& straight3, Card_Make(CLUB, 4));
+	Hand_AddCard(& straight3, Card_Make(HEART, 6));
+
+	Hand_AddCard(& lgbt, Card_Make(CLUB, 3));
+	Hand_AddCard(& lgbt, Card_Make(CLUB, 1));	
+	Hand_AddCard(& lgbt, Card_Make(CLUB, 5));
+	Hand_AddCard(& lgbt, Card_Make(CLUB, 6));
+	Hand_AddCard(& lgbt, Card_Make(CLUB, 7));
+
+	assert(Hand_IsStraight(straight));
+	assert(Hand_IsStraight(straight2));
+	assert(!Hand_IsStraight(straight3));
+	assert(!Hand_IsStraight(lgbt));
 }
 
 //===============================================
@@ -381,8 +436,62 @@ void HandTest_Is()
 	Hand_AddCard(& h, Card_Make(SPADE, 2));
 	Hand_AddCard(& h, Card_Make(HEART, 3));
 	assert (Hand_Is(h) == FOUR_OF_A_KIND);
+	
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(DIAMOND, 3));	
+	Hand_AddCard(& h, Card_Make(HEART, 4));
+	Hand_AddCard(& h, Card_Make(SPADE, 5));
+	Hand_AddCard(& h, Card_Make(HEART, 1));
+	assert (Hand_Is(h) == STRAIGHT);
 
-	// TO COMPLETE
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(DIAMOND, 2));	
+	Hand_AddCard(& h, Card_Make(HEART, 2));
+	Hand_AddCard(& h, Card_Make(SPADE, 3));
+	Hand_AddCard(& h, Card_Make(HEART, 3));
+	assert (Hand_Is(h) == FULL_HOUSE);
+
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(CLUB, 4));	
+	Hand_AddCard(& h, Card_Make(CLUB, 9));
+	Hand_AddCard(& h, Card_Make(CLUB, 6));
+	Hand_AddCard(& h, Card_Make(CLUB, 3));
+	assert (Hand_Is(h) == FLUSH);
+
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(DIAMOND, 2));	
+	Hand_AddCard(& h, Card_Make(HEART, 2));
+	Hand_AddCard(& h, Card_Make(SPADE, 9));
+	Hand_AddCard(& h, Card_Make(HEART, 3));
+	assert (Hand_Is(h) == THREE_OF_A_KIND);
+
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(DIAMOND, 2));	
+	Hand_AddCard(& h, Card_Make(HEART, 9));
+	Hand_AddCard(& h, Card_Make(SPADE, 3));
+	Hand_AddCard(& h, Card_Make(HEART, 3));
+	assert (Hand_Is(h) == TWO_PAIRS);
+
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(DIAMOND, 2));	
+	Hand_AddCard(& h, Card_Make(HEART, 9));
+	Hand_AddCard(& h, Card_Make(SPADE, 7));
+	Hand_AddCard(& h, Card_Make(HEART, 3));
+	assert (Hand_Is(h) == ONE_PAIR);
+
+	Hand_InitEmpty (& h);
+	Hand_AddCard(& h, Card_Make(CLUB, 2));
+	Hand_AddCard(& h, Card_Make(DIAMOND, 4));	
+	Hand_AddCard(& h, Card_Make(HEART, 9));
+	Hand_AddCard(& h, Card_Make(SPADE, 7));
+	Hand_AddCard(& h, Card_Make(HEART, 3));
+	assert (Hand_Is(h) == HIGH_CARD);
 }
 
 //===============================================
