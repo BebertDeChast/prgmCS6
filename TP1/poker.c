@@ -50,5 +50,5 @@ int main () {
   for (int i = 0; i < 9; i++) {
     printf("Practical : %ld | Theorical : %ld", combine_counter[i]/wikiTotal, wikiHits[i]/wikiTotal);
   }
-    
+  return 0;
 }

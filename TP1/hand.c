@@ -235,7 +235,17 @@ HandType Hand_Is(Hand self){
 
 char const * Hand_ToString(Hand self)
 {
-  return output[Hand_Is(self)];
+  char *output_card[] = {"Straight Flush",
+  "Four Of A Kind",
+  "Full House",
+  "Flush",
+  "Straight",
+  "Three Of A Kind",
+  "Two Pair",
+  "One Pair",
+  "High Card"
+  };
+  return output_card[Hand_Is(self)];
 }
 
 void Hand_Print (Hand self)

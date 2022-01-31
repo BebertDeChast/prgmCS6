@@ -32,6 +32,7 @@ install: $(EXEC)
 clean::
 	@echo === DELETING OBJECT FILES ===
 	rm -f *.o
+	rm -f depend
 
 mrpropre: clean
 	@echo === DELETING PROGRAM $(EXEC) ===

@@ -13,17 +13,6 @@ FLUSH, STRAIGHT, THREE_OF_A_KIND,
 TWO_PAIRS, ONE_PAIR, HIGH_CARD
 } HandType;
 
-char *output[] = {"Straight Flush",
-"Four Of A Kind",
-"Full House",
-"Flush",
-"Straight",
-"Three Of A Kind",
-"Two Pair",
-"One Pair",
-"High Card"
-};
-
 typedef struct Hand {
   int length;
   Card cards[NB_CARDS];

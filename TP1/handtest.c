@@ -143,11 +143,11 @@ void HandTest_IsStraightFlush()
 	Hand h;
 	Hand_InitEmpty (& h);
 	
-	Hand_AddCard(& h, Card_Make(CLUB, 7));
+	Hand_AddCard(& h, Card_Make(CLUB, 3));
 	Hand_AddCard(& h, Card_Make(CLUB, 4));	
 	Hand_AddCard(& h, Card_Make(CLUB, 5));
 	Hand_AddCard(& h, Card_Make(CLUB, 6));
-	Hand_AddCard(& h, Card_Make(CLUB, 3));
+	Hand_AddCard(& h, Card_Make(CLUB, 7));
 
 	assert(Hand_IsStraightFlush(h));
 
@@ -396,7 +396,7 @@ void HandTest_IsOnePair()
 	Hand_AddCard(& h, Card_Make(SPADE, 6));
 	Hand_AddCard(& h, Card_Make(CLUB, 4));
 
-	assert(!Hand_IsOnePair(h));
+	assert(Hand_IsOnePair(h));
 }
 
 //===============================================
