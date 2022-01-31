@@ -21,5 +21,5 @@ Card Card_Make(Suit _suit, int _rank)
 
 void Card_Print(Card card)
 {
-  printf("%d %s",card.rank,card.suit);
+  printf("%d %d",card.rank,card.suit);
 }

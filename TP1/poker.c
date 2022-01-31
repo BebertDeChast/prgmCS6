@@ -40,7 +40,7 @@ int main () {
   DeckTest_RunAll();
   HandTest_RunAll();
 
-  int combine_counter[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+  long combine_counter[9] = {0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L};
   for (int i = 0; i < wikiTotal; i++) {
     Hand h = Hand_generate();
     HandType result = Hand_Is(h);
@@ -48,7 +48,7 @@ int main () {
   }
 
   for (int i = 0; i < 9; i++) {
-    printf("Practical : %d | Theorical : %d", combine_counter[i]/wikiTotal, wikiHits[i]/wikiTotal);
+    printf("Practical : %ld | Theorical : %ld", combine_counter[i]/wikiTotal, wikiHits[i]/wikiTotal);
   }
     
 }

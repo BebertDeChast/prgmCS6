@@ -21,12 +21,12 @@ void Hand_AddCard (Hand * self, Card card)
 
 bool Hand_ContainsCard(Hand self, Card card)
 {
-  for(int i = 0; i<self.length; i++){
+  for(int i = 0; i<self.length; i++) {
     if (self.cards[i].rank == card.rank && self.cards[i].suit == card.suit){
       return true;
     }
-  return false;
   }
+  return false;
 }
 
 int Hand_GetCardIndex(Hand self, Card card)
@@ -35,8 +35,8 @@ for(int i = 0; i<self.length; i++){
     if (self.cards[i].rank == card.rank && self.cards[i].suit == card.suit){
       return i;
     }
-  return -1;
   }
+  return -1;
 }
 
 void Hand_RemoveCard (Hand * self, Card card)

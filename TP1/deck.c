@@ -22,6 +22,7 @@ Card Deck_RemoveCardAtEnd (Deck * self)
 {
   assert (self->length > 0);
   self->length--;
+  return self->cards[self->length];
 }
 
 void Deck_InitFullSorted (Deck  * self)
