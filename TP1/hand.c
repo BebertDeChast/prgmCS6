@@ -94,7 +94,7 @@ int  Hand_CountNumberOf(Hand self, int rank)
 bool Hand_IsStraightFlush(Hand self)
 {
   int begin = self.cards[0].rank;
-  int color = self.cards[0].suit;
+  Suit color = self.cards[0].suit;
   for (int i = 1; i < self.length; i++) {
     begin++;
     if (!(begin == self.cards[i].rank && color == self.cards[i].suit)) {
@@ -137,7 +137,7 @@ bool Hand_IsFullHouse(Hand self)
 
 bool Hand_IsFlush(Hand self)
 {
-  int color = self.cards[0].suit;
+  Suit color = self.cards[0].suit;
   for (int i = 1; i < self.length; i++) {
     if (color != self.cards[i].suit) {
       return false;
