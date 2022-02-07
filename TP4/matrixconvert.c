@@ -8,13 +8,12 @@
 #include "full.h"
 
 //===============================================
-int main(int argc, char * argv[])
-{
+int main(int argc, char * argv[]) {
   FullMatrix full;
   SparseMatrix sparse;
 
-  if (argc != 4){ // TO DO - test the number of arguments 
-    perror("Usage: matrixconvert -f|-s source_matrix converted_matrix\nI am the failure !");
+  if (argc != 4) { // TO DO - test the number of arguments 
+    perror("Usage: matrixconvert -f|-s source_matrix converted_matrix\n Wrong number of argument");
     exit(EXIT_FAILURE);
   }
 
@@ -34,7 +33,7 @@ int main(int argc, char * argv[])
     exit(EXIT_SUCCESS);
   }
 
-  if (!strcmp("-s", argv[1])){
+  if (!strcmp("-s", argv[1])) {
     SparseMatrix_ReadFromFile(&sparse,argv[2]);
     printf ("Sparse matrix: \n");
     SparseMatrix_Print(sparse, stdout);
@@ -50,6 +49,6 @@ int main(int argc, char * argv[])
     exit(EXIT_SUCCESS);
   }
 
-  perror("Usage: matrixconvert -f|-s source_matrix converted_matrix");
+  perror("Usage: matrixconvert -f|-s source_matrix converted_matrix. Arguments not recognized.");
   exit(EXIT_FAILURE);
 }

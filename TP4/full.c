@@ -14,7 +14,7 @@ void FullMatrix_InitEmpty(FullMatrix * self) {
 
 //===============================================
 void FullMatrix_Alloc(FullMatrix * self, int rows, int columns) {
-  assert(self->rows > 0 && self->columns > 0);
+  assert(rows > 0 && columns > 0);
   self->rows = rows;
   self->columns = columns;
   self->elements = malloc(rows * sizeof * self->elements);
