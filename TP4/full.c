@@ -6,29 +6,39 @@
 #include "full.h"
 
 //===============================================
-void FullMatrix_InitEmpty(FullMatrix * self)
-{
+void FullMatrix_InitEmpty(FullMatrix * self) {
   self->rows = 0;
   self->columns = 0;
   self->elements = NULL;
 }
 
 //===============================================
-void FullMatrix_Alloc(FullMatrix * self, int rows, int columns)
-{
-	// TO DO
+void FullMatrix_Alloc(FullMatrix * self, int rows, int columns) {
+  assert(self->rows > 0 && self->columns > 0);
+  self->rows = rows;
+  self->columns = columns;
+  self->elements = malloc(rows * sizeof * self->elements);
+  assert(self->elements != NULL);
+  for (int i = 0; i < rows; i++) {
+    self->elements[i] = malloc(columns * sizeof * self->elements[i]);
+    assert(self->elements[i] != NULL);
+  }
 }
 
 //===============================================
 void FullMatrix_PutElement(FullMatrix * self, int row, int column, double element)
 {
-	// TO DO
+	assert(row >= 0 && column >= 0);
+  assert(row <= self->rows && column <= self->columns);
+  self->elements[row][column] = element;
 }
 
 //===============================================
 double FullMatrix_GetElement(FullMatrix self, int row, int column)
 {
-	// TO DO
+	assert(row >= 0 && column >= 0);
+  assert(row <= self.rows && column <= self.columns);
+  return self.elements[row][column];
 }
 
 //===============================================
@@ -72,8 +82,13 @@ int  FullMatrix_CountNonZeroElements(FullMatrix self)
 {
   int count=0;
 
-	// TO DO
-
+	for (int i = 0; i < self.rows; i++) {
+    for (int j = 0; j < self.columns; j++) {
+      if (self.elements[i][j] != 0) {
+        count++;
+      }
+    }
+  }
   return count;
 }
 
@@ -85,7 +100,13 @@ void FullMatrix_Convert(FullMatrix * self, SparseMatrix sparse)
   FullMatrix_InitEmpty(self);
   FullMatrix_Alloc(self, sparse.rows, sparse.columns);
 
-	// TO DO
+  // * 666IQ
+  for (int i = 0; i < self->rows; i++) {
+    for (int j = 0; j < self->columns; j++) {
+      element = SparseMatrix_GetElement(sparse, i, j);
+      FullMatrix_PutElement(self, i, j, element);
+    }
+  }
 }
 
 //===============================================
@@ -102,7 +123,9 @@ void FullMatrix_Print(FullMatrix self, FILE *fout)
 }
 
 //===============================================
-void FullMatrix_Destroy(FullMatrix * self)
-{
-	// TO DO
+void FullMatrix_Destroy(FullMatrix * self) {
+	for (int i = 0; i < self->rows; i++) {
+    free(self->elements[i]); 
+  }
+  free(self->elements);
 }

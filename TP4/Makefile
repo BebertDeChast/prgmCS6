@@ -15,6 +15,7 @@ OBJECTS = $(addsuffix .o , $(MODULES))
 $(EXEC): $(OBJECTS)
 	@echo === GENERATING PROGRAM $@ ===
 	$(CC) $^ $(LIBS) -o $@
+	make clean
 
 %.o : %.c
 	@echo === COMPILING $@ ===
@@ -32,6 +33,7 @@ install: $(EXEC)
 clean::
 	@echo === DELETING OBJECT FILES ===
 	rm -f *.o
+	rm -f ./depend
 
 mrpropre: clean
 	@echo === DELETING PROGRAM $(EXEC) ===
