@@ -13,38 +13,40 @@ int main(int argc, char * argv[])
   FullMatrix full;
   SparseMatrix sparse;
 
-  if ( true ){ // TO DO - test the number of arguments 
-    perror("Usage: matrixconvert -f|-s source_matrix converted_matrix");
+  if (argc != 4){ // TO DO - test the number of arguments 
+    perror("Usage: matrixconvert -f|-s source_matrix converted_matrix\nI am the failure !");
     exit(EXIT_FAILURE);
   }
 
-  if (!strcmp("-f", argv[1])){
-    // TO DO - read full matrix from file
+  if (!strcmp("-f", argv[1])) {
+    FullMatrix_ReadFromFile(&full, argv[2]);
     printf ("Full matrix: \n");
     FullMatrix_Print(full, stdout);
 
-		// TO DO - convert the full matrix to sparse 
-
+    SparseMatrix_Convert(&sparse, full);
     printf ("\nSparse matrix: \n");
     SparseMatrix_Print(sparse,stdout);
 
-		// TO DO - write the converted sparse matrix to file
-		// TO DO - destroy both matrix
+		SparseMatrix_WriteToFile(sparse, argv[3]);
+
+		FullMatrix_Destroy(&full);
+    SparseMatrix_Destroy(&sparse);
     exit(EXIT_SUCCESS);
   }
 
   if (!strcmp("-s", argv[1])){
-    // TO DO - read sparse matrix from file
+    SparseMatrix_ReadFromFile(&sparse,argv[2]);
     printf ("Sparse matrix: \n");
     SparseMatrix_Print(sparse, stdout);
 
-    // TO DO - convert the sparse matrix to full 
+    FullMatrix_Convert(&full, sparse);
 
     printf ("\nFull matrix: \n");
     FullMatrix_Print(full, stdout);
 
-		// TO DO - write the converted sparse matrix to file
-		// TO DO - destroy both matrix
+		FullMatrix_WriteToFile(full,argv[3]);
+		FullMatrix_Destroy(&full);
+    SparseMatrix_Destroy(&sparse);
     exit(EXIT_SUCCESS);
   }
 

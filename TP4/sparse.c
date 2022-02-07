@@ -54,7 +54,7 @@ void SparseMatrix_ReadFromFile(SparseMatrix * self, char * fileName)
 
   for (int i=0; i<nbElements; i++)
     fscanf(fin, "%d", &self->irows[i]);
-  for (int i=0; i<=nbElements; i++)
+  for (int i=0; i<nbElements; i++)
     fscanf(fin, "%d", &self->icolumns[i]);
   for (int i=0; i<nbElements; i++)
     fscanf(fin, "%lf", &self->elements[i]);
