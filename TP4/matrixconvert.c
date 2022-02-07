@@ -26,6 +26,14 @@ int main(int argc, char * argv[]) {
     printf ("\nSparse matrix: \n");
     SparseMatrix_Print(sparse,stdout);
 
+    SparseMatrix_AddValue(&sparse, 0, 0, 0);
+    printf ("\nReturn of the Sparse matrix: \n");
+    SparseMatrix_Print(sparse,stdout);
+
+    SparseMatrix_AddValue(&sparse, 0, 2, 0);
+    printf ("\nReturn of the Sparse matrix: \n");
+    SparseMatrix_Print(sparse,stdout);
+
 		SparseMatrix_WriteToFile(sparse, argv[3]);
 
 		FullMatrix_Destroy(&full);

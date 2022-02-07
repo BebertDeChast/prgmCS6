@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <stdbool.h>
 #include "sparse.h"
 
 
@@ -25,6 +26,50 @@ void SparseMatrix_Alloc(SparseMatrix * self, int rows,  int columns, int nbEleme
   self->icolumns = malloc(nbElements * sizeof * self->icolumns);
   self->elements = malloc(nbElements * sizeof * self->elements);
   assert(self->irows != NULL && self->icolumns != NULL && self->elements != NULL);
+}
+
+//===============================================
+void SparseMatrix_AddValue(SparseMatrix * self, int row,  int column, double element) {
+	assert(row >= 0 && column >= 0 && row <= self->rows && column <= self->columns);
+
+  // ? Checking if we are gonna replace a non-zero value
+  bool replacingValue = false;
+  int index;
+  for (int i = 0; i < self->nbElements; i++) {
+    if(self->irows[i] == row && self->icolumns[i] == column) {
+      replacingValue = true;
+      index = i;
+    }
+  }
+  if (element == 0 && !replacingValue) { // ? We want to replace a 0 with a 0, no change
+    return;
+  }
+  if (element != 0 && replacingValue) { // ? We want to replace a value with another value, no alloc change
+    self->elements[index] = element;
+    return;
+  }
+
+  if (element == 0) { // ? Case we want to put a 0 on an existing value
+    self->nbElements--;
+    for (int i = index; i < self->nbElements; i++) {
+      self->irows[i] = self->irows[i + 1];
+      self->icolumns[i] = self->icolumns[i + 1];
+      self->elements[i] = self->elements[i + 1];
+    }
+    printf("-%d-\n", self->nbElements);
+    self->irows = realloc(self->irows, self->nbElements);
+    self->icolumns = realloc(self->icolumns, self->nbElements);
+    self->elements = realloc(self->elements, self->nbElements);
+  } else { // ? Case we want to put a value on an existing 0
+    self->nbElements++;
+    self->irows = realloc(self->irows, self->nbElements);
+    self->icolumns = realloc(self->icolumns, self->nbElements);
+    self->elements = realloc(self->elements, self->nbElements);
+    self->irows[self->nbElements - 1] = row;
+    self->icolumns[self->nbElements - 1] = column;
+    self->elements[self->nbElements - 1] = element;
+  }
+  return;
 }
 
 //===============================================

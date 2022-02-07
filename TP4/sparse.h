@@ -21,5 +21,5 @@ void SparseMatrix_WriteToFile(SparseMatrix self, char * fileName);
 void SparseMatrix_Convert(SparseMatrix * self, FullMatrix full);
 void SparseMatrix_Print(SparseMatrix self, FILE *fout);
 void SparseMatrix_Destroy(SparseMatrix *self);
-
+void SparseMatrix_AddValue(SparseMatrix *self, int row, int column, double element);
 #endif
