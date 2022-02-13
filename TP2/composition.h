@@ -3,8 +3,9 @@
 #define COMPOSITION_H
 #include "expression.h"
 
-typedef struct Composition {
-    Expression * expressions;
+typedef struct Composition
+{
+    Expression *expressions;
     int capacity;
     int length;
 } Composition;

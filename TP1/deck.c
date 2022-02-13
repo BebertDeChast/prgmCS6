@@ -6,31 +6,33 @@
 #include "card.h"
 #include "deck.h"
 
-void Deck_InitEmpty (Deck * self)
+void Deck_InitEmpty(Deck *self)
 {
   self->length = 0;
 }
 
-void Deck_AddCardAtEnd (Deck * self, Card card)
+void Deck_AddCardAtEnd(Deck *self, Card card)
 {
-  assert (self->length <= DECK_CAPACITY);
+  assert(self->length <= DECK_CAPACITY);
   self->cards[self->length] = card;
   self->length++;
 }
 
-Card Deck_RemoveCardAtEnd (Deck * self)
+Card Deck_RemoveCardAtEnd(Deck *self)
 {
-  assert (self->length > 0);
+  assert(self->length > 0);
   self->length--;
   return self->cards[self->length];
 }
 
-void Deck_InitFullSorted (Deck  * self)
+void Deck_InitFullSorted(Deck *self)
 {
   Deck_InitEmpty(self);
   // ? This shit went from 1 to 100 really quickly
-  for (Suit i = 0; i < NB_SUITS; i++) { // * i is the card's color
-    for (int j = 0; j < NB_RANKS; j++) { // * j is the card's rank
+  for (Suit i = 0; i < NB_SUITS; i++)
+  { // * i is the card's color
+    for (int j = 0; j < NB_RANKS; j++)
+    { // * j is the card's rank
       // TODO : Fix my sanity
       Card card = Card_Make(i, j);
       Deck_AddCardAtEnd(self, card);
@@ -38,11 +40,12 @@ void Deck_InitFullSorted (Deck  * self)
   }
 }
 
-void Deck_Shuffle (Deck * self)
+void Deck_Shuffle(Deck *self)
 {
-  int randomindex; 
+  int randomindex;
   Card temporarycard;
-  for (int i; i < DECK_CAPACITY; i++) {
+  for (int i; i < DECK_CAPACITY; i++)
+  {
     randomindex = rand() % DECK_CAPACITY;
     temporarycard = self->cards[i];
     self->cards[i] = self->cards[randomindex];

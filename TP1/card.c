@@ -3,12 +3,12 @@
 #include <assert.h>
 #include "card.h"
 
-char *suitname[]={"club", "diamond", "heart", "spade"};
+char *suitname[] = {"club", "diamond", "heart", "spade"};
 
-char const * Suit_ToString(Suit suit)
+char const *Suit_ToString(Suit suit)
 {
-  assert (suit < NB_SUITS);
-  return(suitname[suit]);
+  assert(suit < NB_SUITS);
+  return (suitname[suit]);
 }
 
 Card Card_Make(Suit _suit, int _rank)
@@ -21,5 +21,5 @@ Card Card_Make(Suit _suit, int _rank)
 
 void Card_Print(Card card)
 {
-  printf("%d %d",card.rank,card.suit);
+  printf("%d %d", card.rank, card.suit);
 }
