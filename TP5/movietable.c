@@ -61,7 +61,7 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
   fgets(line, sizeof(line), file);
   while (*line != EOF)
   {
-    if (strcmp(line, "\n\0"))
+    if (strcmp(line, "\n\0") || strcmp(line, "\0"))
     {
       movie = Movie_CreateMovieFromLine(line);
       MovieTable_AddMovie(self, *movie);
