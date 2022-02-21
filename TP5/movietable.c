@@ -55,11 +55,13 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
   FILE *file;
   Movie *movie;
   file = fopen(filename, "r");
-  assert(file == NULL);
+  printf("opened\n");
+  assert(file != NULL);
 
   char line[256]; // ? Ceci est un buffer
   fgets(line, 256, file);
   fgets(line, 256, file);
+  printf('ptn\n');
   while (*line != EOF)
   {
     if (strlen(line) != 0)
@@ -69,6 +71,7 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
     }
     fgets(line, 256, file);
   }
+  printf('ptn\n');
   fclose(file);
 }
 

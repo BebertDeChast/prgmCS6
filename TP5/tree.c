@@ -15,31 +15,112 @@ void Tree_InitEmpty(Tree *tree)
 //===============================================
 void Tree_InsertMovie(Tree *self, Movie movie)
 {
-  // TODO
+  Node *current_node;
+  current_node = self->root;
+  int children_index;
+  for (size_t i = 0; i < strlen(movie.title); i++)
+  {
+    children_index = CHAR_TO_INDEX(movie.title[i]);
+    if (current_node->children[children_index] == NULL)
+    {
+      current_node->children[children_index] = Node_AllocEmpty();
+    }
+    current_node = current_node->children[children_index];
+  }
+  current_node->isWordEnd = true;
+  current_node->movieID = movie.ID;
+  self->size++;
 }
 
 //===============================================
 void Tree_CreateFromMovieTable(Tree *self, MovieTable movietable)
 {
-  // TODO
+  Tree_InitEmpty(self);
+  for (int i = 0; i <= movietable.capacity; i++)
+  {
+    if (movietable.used[i])
+    {
+      Tree_InsertMovie(self, movietable.movies[i]);
+    }
+  }
 }
 
 //===============================================
 bool Tree_Search(Tree self, MovieTitle title)
 {
-  // TODO
+  Node *current_node;
+  current_node = self.root;
+  int children_index;
+  for (size_t i = 0; i < strlen(title); i++)
+  {
+    children_index = CHAR_TO_INDEX(title[i]);
+    if (current_node->children[children_index] == NULL)
+    {
+      return false;
+    }
+    current_node = current_node->children[children_index];
+  }
+  if (current_node->isWordEnd)
+  {
+    return true;
+  }
+  return false;
 }
 
 //===============================================
 void Tree_Suggestions(Node *self, MovieTable movieTable, MovieTitle prefix)
 {
-  // TODO
+  if (self->isWordEnd)
+  {
+    Movie_Print(movieTable.movies[self->movieID], stdout);
+  }
+
+  if (Node_IsLastNode(*self))
+  {
+    return;
+  }
+  else if (strlen(prefix) == 0)
+  {
+    for (int i; i < ALPHABET_SIZE; i++)
+    {
+      Tree_Suggestions(self->children[i], movieTable, prefix);
+    }
+  }
+  else
+  {
+    Node *child = self->children[CHAR_TO_INDEX(prefix[0])];
+    if (child == NULL)
+    {
+      return;
+    }
+    else
+    {
+      Tree_Suggestions(child, movieTable, prefix + 1);
+    }
+  }
 }
 
 //===============================================
 int Tree_AutoSuggestions(Tree self, MovieTable movieTable, MovieTitle prefix)
 {
-  // TODO
+  Node *current_node;
+  current_node = self.root;
+  int children_index;
+  for (size_t i = 0; i < strlen(prefix); i++)
+  {
+    children_index = CHAR_TO_INDEX(prefix[i]);
+    if (current_node->children[children_index] == NULL)
+    {
+      return 0;
+    }
+    current_node = current_node->children[children_index];
+  }
+  if (current_node->isWordEnd)
+  {
+    return 1;
+  }
+  Tree_Suggestions(current_node, movieTable, "");
+  return -1;
 }
 
 //===============================================
