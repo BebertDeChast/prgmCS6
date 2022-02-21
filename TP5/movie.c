@@ -51,7 +51,7 @@ Movie *Movie_CreateMovieFromLine(char *line)
 
   ptr = strtok(NULL, "\"");
   Movie_SetTitle(newMovie, ptr);
-  ptr = strtok(NULL, "\"");
+  ptr = strtok(NULL, "\""); // ! In this iteration, the pointer will point "," so we skip it by doing another one
   ptr = strtok(NULL, "\"");
   strcpy(newline, ptr);
   ptr = strtok(newline, "|");

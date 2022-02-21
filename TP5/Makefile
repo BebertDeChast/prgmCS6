@@ -5,7 +5,7 @@ CC     = gcc
 CFLAGS = -std=c99 -W -Wall
 LIBS   = -lm
 
-EXEC = matrixconvert
+EXEC = moviesuggestions
 TARGET_DIR = bin
 HEADERS = $(wildcard *.h)
 SOURCES = $(wildcard *.c)

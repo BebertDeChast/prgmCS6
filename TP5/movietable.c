@@ -19,7 +19,7 @@ MovieTable *MovieTable_AllocEmpty()
 //===============================================
 bool MovieTable_OverCapacity(MovieTable self, int id)
 {
-  // TODO
+  return (self.capacity <= id);
 }
 
 //===============================================
@@ -41,13 +41,34 @@ void MovieTable_Realloc(MovieTable *self)
 //===============================================
 void MovieTable_AddMovie(MovieTable *self, Movie movie)
 {
-  // TODO
+  while (!MovieTable_OverCapacity(*self, movie.ID)) // ? Reallocating memory to welcome the new movie
+  {
+    MovieTable_Realloc(self);
+  }
+  self->movies[movie.ID] = movie;
+  self->used[movie.ID] = true;
 }
 
 //===============================================
 void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
 {
-  // TODO
+  FILE *file;
+  Movie *movie;
+  file = fopen(filename, "r");
+  assert(file == NULL);
+
+  char line[256]; // ? Ceci est un buffer
+  fgets(line, sizeof(line), file);
+  while (*line != EOF)
+  {
+    if (strcmp(line, "\n\0"))
+    {
+      movie = Movie_CreateMovieFromLine(line);
+      MovieTable_AddMovie(self, *movie);
+    }
+    fgets(line, sizeof(line), file);
+  }
+  fclose(file);
 }
 
 //===============================================
@@ -59,7 +80,7 @@ int MovieTable_GetCapacity(MovieTable self)
 //===============================================
 Movie MovieTable_GetMovie(MovieTable self, int id)
 {
-  // TODO
+  return self.movies[id];
 }
 
 //===============================================
