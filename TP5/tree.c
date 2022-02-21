@@ -15,31 +15,31 @@ void Tree_InitEmpty(Tree *tree)
 //===============================================
 void Tree_InsertMovie(Tree *self, Movie movie)
 {
-	//TODO
+  // TODO
 }
 
 //===============================================
 void Tree_CreateFromMovieTable(Tree *self, MovieTable movietable)
 {
-	//TODO
+  // TODO
 }
 
 //===============================================
 bool Tree_Search(Tree self, MovieTitle title)
 {
-	//TODO
+  // TODO
 }
 
 //===============================================
 void Tree_Suggestions(Node *self, MovieTable movieTable, MovieTitle prefix)
 {
-	//TODO
+  // TODO
 }
 
 //===============================================
-int Tree_AutoSuggestions(Tree self, MovieTable movieTable,  MovieTitle prefix)
+int Tree_AutoSuggestions(Tree self, MovieTable movieTable, MovieTitle prefix)
 {
-	//TODO
+  // TODO
 }
 
 //===============================================
@@ -49,9 +49,9 @@ int Tree_GetSize(Tree self)
 }
 
 //===============================================
-void Tree_Print(Tree self, FILE * fout)
+void Tree_Print(Tree self, FILE *fout)
 {
-  printf ("\n");
+  printf("\n");
   Node_Print(*self.root, fout);
 }
 
