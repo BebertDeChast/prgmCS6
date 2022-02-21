@@ -58,15 +58,16 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
   assert(file == NULL);
 
   char line[256]; // ? Ceci est un buffer
-  fgets(line, sizeof(line), file);
+  fgets(line, 256, file);
+  fgets(line, 256, file);
   while (*line != EOF)
   {
-    if (strcmp(line, "\n\0") || strcmp(line, "\0"))
+    if (strlen(line) != 0)
     {
       movie = Movie_CreateMovieFromLine(line);
       MovieTable_AddMovie(self, *movie);
     }
-    fgets(line, sizeof(line), file);
+    fgets(line, 256, file);
   }
   fclose(file);
 }
@@ -86,7 +87,13 @@ Movie MovieTable_GetMovie(MovieTable self, int id)
 //===============================================
 void MovieTable_Print(MovieTable self, FILE *fout)
 {
-  // TODO
+  for (int i = 0; i <= self.capacity; i++)
+  {
+    if (self.used[i])
+    {
+      Movie_Print(self.movies[i], fout);
+    }
+  }
 }
 
 //===============================================

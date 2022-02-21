@@ -2,7 +2,7 @@
 
 SHELL  = /bin/bash
 CC     = gcc
-CFLAGS = -std=c99 -W -Wall
+CFLAGS = -W -Wall
 LIBS   = -lm
 
 EXEC = moviesuggestions

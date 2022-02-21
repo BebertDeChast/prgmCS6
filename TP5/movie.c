@@ -61,6 +61,7 @@ Movie *Movie_CreateMovieFromLine(char *line)
     Movie_AddGenre(newMovie, ptr);
     ptr = strtok(NULL, "|");
   }
+  free(newline);
   return newMovie;
 }
 

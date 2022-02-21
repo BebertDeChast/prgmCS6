@@ -7,13 +7,28 @@
 //===============================================
 Node *Node_AllocEmpty()
 {
-  // TODO
+  Node *node;
+  node = malloc(sizeof *node);
+  node->isWordEnd = false;
+  node->movieID = -1;
+  for (int i = 0; i < ALPHABET_SIZE; i++)
+  {
+    node->children[i] = NULL;
+  }
+  return node;
 }
 
 //===============================================
 bool Node_IsLastNode(Node self)
 {
-  // TODO
+  for (int i = 0; i < ALPHABET_SIZE; i++)
+  {
+    if (self.children[i] != NULL)
+    {
+      return false;
+    }
+  }
+  return true;
 }
 
 //===============================================
@@ -48,5 +63,18 @@ void Node_Print(Node self, FILE *fout)
 //===============================================
 void Node_DestroyTree(Node *self)
 {
-  // TODO
+  if (Node_IsLastNode(*self))
+  {
+    free(self);
+  }
+  else
+  {
+    for (int i = 0; i < ALPHABET_SIZE; i++)
+    {
+      if (self->children[i] != NULL)
+      {
+        Node_DestroyTree(self->children[i]);
+      }
+    }
+  }
 }
