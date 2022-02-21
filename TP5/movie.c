@@ -6,10 +6,10 @@
 #include "movie.h"
 
 //===============================================
-Movie * Movie_AllocEmpty()
+Movie *Movie_AllocEmpty()
 {
-  Movie *newMovie = malloc (sizeof * newMovie);
-  strcpy(newMovie->title,"");
+  Movie *newMovie = malloc(sizeof *newMovie);
+  strcpy(newMovie->title, "");
   newMovie->genre = NULL;
   newMovie->numberOfGenre = 0;
   return newMovie;
@@ -18,29 +18,31 @@ Movie * Movie_AllocEmpty()
 //===============================================
 void Movie_GenreRealloc(Movie *self)
 {
-	//TODO
+  self->genre = realloc(self->genre, (self->numberOfGenre + 1) * sizeof self->genre);
 }
 
 //===============================================
-void Movie_SetTitle(Movie * self, MovieTitle title)
+void Movie_SetTitle(Movie *self, MovieTitle title)
 {
   strcpy(self->title, title);
 }
 
 //===============================================
-void Movie_SetID(Movie * self, int ID)
+void Movie_SetID(Movie *self, int ID)
 {
   self->ID = ID;
 }
 
 //===============================================
-void Movie_AddGenre(Movie * self, GenreType genre)
+void Movie_AddGenre(Movie *self, GenreType genre)
 {
-	//TODO
+  Movie_GenreRealloc(self);
+  strcpy(self->genre[self->numberOfGenre], genre);
+  self->numberOfGenre++;
 }
 
 //===============================================
-Movie * Movie_CreateMovieFromLine(char *line)
+Movie *Movie_CreateMovieFromLine(char *line)
 {
   Movie *newMovie = Movie_AllocEmpty();
   char *newline = strdup(line);
@@ -51,10 +53,11 @@ Movie * Movie_CreateMovieFromLine(char *line)
   Movie_SetTitle(newMovie, ptr);
   ptr = strtok(NULL, "\"");
   ptr = strtok(NULL, "\"");
-  strcpy(newline,ptr);
+  strcpy(newline, ptr);
   ptr = strtok(newline, "|");
 
-  while (ptr != NULL){
+  while (ptr != NULL)
+  {
     Movie_AddGenre(newMovie, ptr);
     ptr = strtok(NULL, "|");
   }
@@ -66,13 +69,14 @@ void Movie_Print(Movie self, FILE *fout)
 {
   fprintf(fout, "%d - ", self.ID);
   fprintf(fout, "%s : ", self.title);
-  for (int i=0; i<self.numberOfGenre-1; i++)
+  for (int i = 0; i < self.numberOfGenre - 1; i++)
     fprintf(fout, "%s|", self.genre[i]);
-  fprintf(fout, "%s\n", self.genre[self.numberOfGenre-1]);
+  fprintf(fout, "%s\n", self.genre[self.numberOfGenre - 1]);
 }
 
 //===============================================
-void Movie_Destroy(Movie * self)
+void Movie_Destroy(Movie *self)
 {
-	//TODO
+  free(self->genre);
+  free(self);
 }

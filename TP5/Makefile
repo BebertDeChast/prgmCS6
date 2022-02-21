@@ -5,7 +5,7 @@ CC     = gcc
 CFLAGS = -std=c99 -W -Wall
 LIBS   = -lm
 
-EXEC = moviesuggestions
+EXEC = matrixconvert
 TARGET_DIR = bin
 HEADERS = $(wildcard *.h)
 SOURCES = $(wildcard *.c)
@@ -15,6 +15,7 @@ OBJECTS = $(addsuffix .o , $(MODULES))
 $(EXEC): $(OBJECTS)
 	@echo === GENERATING PROGRAM $@ ===
 	$(CC) $^ $(LIBS) -o $@
+	make clean
 
 %.o : %.c
 	@echo === COMPILING $@ ===
@@ -27,15 +28,16 @@ depend: $(HEADERS) $(SOURCES)
 install: $(EXEC)
 	@echo === INSTALLING PROGRAM $(EXEC) ===
 	mkdir -p $(TARGET_DIR)
-	cp $(EXEC) $(TARGET_DIR)
+	cp $(EXEC) $(TARGET_DIR)	
 
 clean::
 	@echo === DELETING OBJECT FILES ===
 	rm -f *.o
+	rm -f ./depend
 
 mrpropre: clean
 	@echo === DELETING PROGRAM $(EXEC) ===
-	rm -f $(EXEC)
+	rm -f $(EXEC) 
 
 rebuild:: mrpropre $(EXEC)
 
