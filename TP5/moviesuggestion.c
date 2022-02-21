@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
   movieTable = MovieTable_AllocEmpty();
 
   MovieTable_ReadMoviesFromFile(movieTable, argv[1]);
-  printf("1\n");
   MovieTable_Print(*movieTable, stdout);
 
   printf("==================\n");

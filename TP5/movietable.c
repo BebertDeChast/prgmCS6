@@ -58,20 +58,20 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
   printf("opened\n");
   assert(file != NULL);
 
+  perror("test1");
   char line[256]; // ? Ceci est un buffer
+  perror("test2");
   fgets(line, 256, file);
-  fgets(line, 256, file);
-  printf('ptn\n');
-  while (*line != EOF)
+  perror("test3");
+  while (fgets(line, 256, file) != NULL)
   {
     if (strlen(line) != 0)
     {
       movie = Movie_CreateMovieFromLine(line);
       MovieTable_AddMovie(self, *movie);
     }
-    fgets(line, 256, file);
   }
-  printf('ptn\n');
+  perror("test4");
   fclose(file);
 }
 
