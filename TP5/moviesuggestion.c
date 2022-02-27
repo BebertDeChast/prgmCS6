@@ -22,10 +22,11 @@ int main(int argc, char *argv[])
   MovieTable_ReadMoviesFromFile(movieTable, argv[1]);
   MovieTable_Print(*movieTable, stdout);
 
-  printf("==================\n");
+  printf("==================\n"); // !  IT WORKS UNTIL HERE
 
   Tree_InitEmpty(&tree);
-  Tree_CreateFromMovieTable(&tree, *movieTable);
+  Tree_CreateFromMovieTable(&tree, *movieTable); // ! It crashed here
+  perror("Holy deliverance");
   printf("Tree size : %d\n", Tree_GetSize(tree));
 
   Tree_Print(tree, stdout);

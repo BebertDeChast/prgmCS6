@@ -18,7 +18,7 @@ Movie *Movie_AllocEmpty()
 //===============================================
 void Movie_GenreRealloc(Movie *self)
 {
-  self->genre = realloc(self->genre, (self->numberOfGenre + 1) * sizeof self->genre);
+  self->genre = realloc(self->genre, (self->numberOfGenre + 1) * sizeof(GenreType));
 }
 
 //===============================================

@@ -41,7 +41,7 @@ void MovieTable_Realloc(MovieTable *self)
 //===============================================
 void MovieTable_AddMovie(MovieTable *self, Movie movie)
 {
-  while (!MovieTable_OverCapacity(*self, movie.ID)) // ? Reallocating memory to welcome the new movie
+  while (MovieTable_OverCapacity(*self, movie.ID)) // ? Reallocating memory to welcome the new movie
   {
     MovieTable_Realloc(self);
   }
@@ -55,23 +55,18 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
   FILE *file;
   Movie *movie;
   file = fopen(filename, "r");
-  printf("opened\n");
   assert(file != NULL);
 
-  perror("test1");
-  char line[256]; // ? Ceci est un buffer
-  perror("test2");
+  char line[256];
   fgets(line, 256, file);
-  perror("test3");
   while (fgets(line, 256, file) != NULL)
   {
-    if (strlen(line) != 0)
+    if (strlen(line) > 1)
     {
       movie = Movie_CreateMovieFromLine(line);
       MovieTable_AddMovie(self, *movie);
     }
   }
-  perror("test4");
   fclose(file);
 }
 
