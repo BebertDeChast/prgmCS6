@@ -19,7 +19,7 @@ void Tree_InsertMovie(Tree *self, Movie movie)
   current_node = self->root;
   int children_index;
   char c;
-  for (size_t i = 0; i < (int)strlen(movie.title); i++)
+  for (size_t i = 0; i < strlen(movie.title); i++)
   {
     c = movie.title[i];
     children_index = CHAR_TO_INDEX(c);
@@ -92,7 +92,7 @@ int Tree_AutoSuggestions(Tree self, MovieTable movieTable, MovieTitle prefix)
   Node *current_node;
   current_node = self.root;
   int children_index;
-  for (int i = 0; i < (strlen(prefix) - 1); i++)
+  for (size_t i = 0; i < (strlen(prefix) - 1); i++)
   {
     children_index = CHAR_TO_INDEX(prefix[i]);
     if (current_node->children[children_index] == NULL)
