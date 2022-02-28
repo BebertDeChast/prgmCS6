@@ -18,17 +18,24 @@ void Tree_InsertMovie(Tree *self, Movie movie)
   Node *current_node;
   current_node = self->root;
   int children_index;
-  for (size_t i = 0; i < strlen(movie.title); i++)
+  char c;
+  for (size_t i = 0; i < (int)strlen(movie.title); i++)
   {
-    children_index = CHAR_TO_INDEX(movie.title[i]);
+    c = movie.title[i];
+    children_index = CHAR_TO_INDEX(c);
+    //! Rustine
+    if (children_index < 0) {
+      children_index = -children_index;
+    }
     printf("Working with index : %d\n", children_index);
     printf("%d\n", sizeof(current_node->children[children_index]));
-    printf("%d\n", current_node->children[children_index] == NULL);
+    printf("%d\n", current_node->children[children_index]);
     if (current_node->children[children_index] == NULL)
     {
       current_node->children[children_index] = Node_AllocEmpty();
     }
     current_node = current_node->children[children_index];
+    assert(current_node != NULL);
   }
   current_node->isWordEnd = true;
   current_node->movieID = movie.ID;
@@ -38,7 +45,7 @@ void Tree_InsertMovie(Tree *self, Movie movie)
 //===============================================
 void Tree_CreateFromMovieTable(Tree *self, MovieTable movietable)
 {
-  Tree_InitEmpty(self);
+  // Tree_InitEmpty(self);
   for (int i = 0; i <= movietable.capacity; i++)
   {
     if (movietable.used[i])
@@ -63,6 +70,7 @@ bool Tree_Search(Tree self, MovieTitle title)
       return false;
     }
     current_node = current_node->children[children_index];
+    assert(current_node != NULL);
   }
   if (current_node->isWordEnd)
   {
@@ -75,31 +83,13 @@ bool Tree_Search(Tree self, MovieTitle title)
 void Tree_Suggestions(Node *self, MovieTable movieTable, MovieTitle prefix)
 {
   if (self->isWordEnd)
-  {
+  {  
     Movie_Print(movieTable.movies[self->movieID], stdout);
   }
-
-  if (Node_IsLastNode(*self))
+  for (int j = 0; j < ALPHABET_SIZE; j++)
   {
-    return;
-  }
-  else if (strlen(prefix) == 0)
-  {
-    for (int i; i < ALPHABET_SIZE; i++)
-    {
-      Tree_Suggestions(self->children[i], movieTable, prefix);
-    }
-  }
-  else
-  {
-    Node *child = self->children[CHAR_TO_INDEX(prefix[0])];
-    if (child == NULL)
-    {
-      return;
-    }
-    else
-    {
-      Tree_Suggestions(child, movieTable, prefix + 1);
+    if (self->children[j] != NULL) {
+      Tree_Suggestions(self->children[j], movieTable, prefix);
     }
   }
 }
@@ -110,7 +100,7 @@ int Tree_AutoSuggestions(Tree self, MovieTable movieTable, MovieTitle prefix)
   Node *current_node;
   current_node = self.root;
   int children_index;
-  for (size_t i = 0; i < strlen(prefix); i++)
+  for (int i = 0; i < (strlen(prefix) - 1); i++)
   {
     children_index = CHAR_TO_INDEX(prefix[i]);
     if (current_node->children[children_index] == NULL)
@@ -123,7 +113,7 @@ int Tree_AutoSuggestions(Tree self, MovieTable movieTable, MovieTitle prefix)
   {
     return 1;
   }
-  Tree_Suggestions(current_node, movieTable, "");
+  Tree_Suggestions(current_node, movieTable, prefix);
   return -1;
 }
 

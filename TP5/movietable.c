@@ -57,9 +57,9 @@ void MovieTable_ReadMoviesFromFile(MovieTable *self, char *filename)
   file = fopen(filename, "r");
   assert(file != NULL);
 
-  char line[256];
-  fgets(line, 256, file);
-  while (fgets(line, 256, file) != NULL)
+  char line[LINE_MAX_SIZE];
+  fgets(line, LINE_MAX_SIZE, file);
+  while (fgets(line, LINE_MAX_SIZE, file) != NULL)
   {
     if (strlen(line) > 1)
     {
@@ -85,7 +85,7 @@ Movie MovieTable_GetMovie(MovieTable self, int id)
 //===============================================
 void MovieTable_Print(MovieTable self, FILE *fout)
 {
-  for (int i = 0; i <= self.capacity; i++)
+  for (int i = 0; i < self.capacity; i++)
   {
     if (self.used[i])
     {
