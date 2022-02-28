@@ -6,7 +6,7 @@
 #define ALPHABET_SIZE 224
 #define MOVIEID_MAX_SIZE 256
 
-#define CHAR_TO_INDEX(c) ((int)c - (int)' ')
+#define CHAR_TO_INDEX(c) (((int)c - (int)' ') < 0) ? 0 : ((int)c - (int)' ')
 
 typedef struct Node
 {

@@ -23,13 +23,6 @@ void Tree_InsertMovie(Tree *self, Movie movie)
   {
     c = movie.title[i];
     children_index = CHAR_TO_INDEX(c);
-    //! Rustine
-    if (children_index < 0) {
-      children_index = -children_index;
-    }
-    printf("Working with index : %d\n", children_index);
-    printf("%d\n", sizeof(current_node->children[children_index]));
-    printf("%d\n", current_node->children[children_index]);
     if (current_node->children[children_index] == NULL)
     {
       current_node->children[children_index] = Node_AllocEmpty();
@@ -50,7 +43,6 @@ void Tree_CreateFromMovieTable(Tree *self, MovieTable movietable)
   {
     if (movietable.used[i])
     {
-      printf("Trying to insert in tree : %d, %s\n", movietable.movies[i].ID, movietable.movies[i].title);
       Tree_InsertMovie(self, movietable.movies[i]);
     }
   }
