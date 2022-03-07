@@ -55,7 +55,9 @@ void Mail_Realloc(Mail *self)
 //===============================================
 bool Mail_IsMail(FILE *fin)
 {
-  // TODO
+  char *line[10];
+  fgets(line, 10, fin);
+  return !strcmp(line, "#email");
 }
 
 //===============================================

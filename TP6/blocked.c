@@ -22,25 +22,58 @@ bool Blocked_IsFull(Blocked self)
 //===============================================
 void Blocked_Realloc(Blocked *self)
 {
-  // TODO
+  if (self->capacity > 0)
+  {
+    self->capacity *= 2;
+  }
+  else
+  {
+    self->capacity = 2;
+  }
+  self->mailAddress = realloc(self->mailAddress, self->capacity * sizeof *self->mailAddress);
+  assert(self->mailAddress != NULL);
 }
 
 //===============================================
 void Blocked_AddAddress(Blocked *self, BlockedAddress mailAddress)
 {
-  // TODO
+  if (Blocked_IsFull(*self))
+  {
+    Blocked_Realloc(self);
+  }
+  strcpy(self->mailAddress[self->length], mailAddress);
+  self->length++;
 }
 
 //===============================================
 void Blocked_AddAddressFromFile(Blocked *self, char *filename)
 {
-  // TODO
+  FILE *file;
+  BlockedAddress address;
+  file = fopen(filename, "r");
+  assert(file != NULL);
+
+  while (fgets(address, MAX_BLOCKEDADDRESS_SIZE, file) != NULL)
+  {
+    if (strlen(address) > 1)
+    {
+      Blocked_AddAddress(self, address);
+    }
+  }
+  fclose(file);
 }
 
 //===============================================
 bool Blocked_IsBlocked(Blocked self, BlockedAddress mailAddress)
 {
-  // TODO
+  for (int i = 0; i < self.length; i++)
+  {
+    if (!strcmp(self.mailAddress[i], mailAddress))
+    {
+      return true;
+    }
+  }
+  return false;
 }
 
 //===============================================
