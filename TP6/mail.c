@@ -9,15 +9,15 @@
 #include "mail.h"
 
 //===============================================
-void Mail_InitEmpty(Mail * self)
+void Mail_InitEmpty(Mail *self)
 {
-	self->capacity = 0;
+  self->capacity = 0;
   self->length = 0;
   self->sender = NULL;
-	self->subject = NULL;
-	self->classification = NULL;
-	self->totalWeight = NULL;
-	self->filename = NULL;
+  self->subject = NULL;
+  self->classification = NULL;
+  self->totalWeight = NULL;
+  self->filename = NULL;
 }
 
 //===============================================
@@ -27,22 +27,22 @@ bool Mail_IsFull(Mail self)
 }
 
 //===============================================
-void Mail_Realloc(Mail * self)
+void Mail_Realloc(Mail *self)
 {
   if (self->capacity == 0)
     self->capacity = 1;
 
   int newCapacity = self->capacity * 2;
-  MailAddress * newSender = realloc(self->sender, newCapacity * sizeof * newSender);
-  assert (newSender != NULL );
-  Subject * newSubject = realloc(self->subject, newCapacity * sizeof * newSubject);
-  assert (newSubject != NULL );
-  MailClassification * newClassification = realloc(self->classification, newCapacity * sizeof * newClassification);
-  assert (newClassification != NULL );
-  int * newTotalWeight = realloc(self->totalWeight, newCapacity * sizeof * newTotalWeight);
-  assert (newTotalWeight != NULL );
-  Filename * newFilename = realloc(self->filename, newCapacity * sizeof * newFilename);
-  assert (newFilename != NULL );
+  MailAddress *newSender = realloc(self->sender, newCapacity * sizeof *newSender);
+  assert(newSender != NULL);
+  Subject *newSubject = realloc(self->subject, newCapacity * sizeof *newSubject);
+  assert(newSubject != NULL);
+  MailClassification *newClassification = realloc(self->classification, newCapacity * sizeof *newClassification);
+  assert(newClassification != NULL);
+  int *newTotalWeight = realloc(self->totalWeight, newCapacity * sizeof *newTotalWeight);
+  assert(newTotalWeight != NULL);
+  Filename *newFilename = realloc(self->filename, newCapacity * sizeof *newFilename);
+  assert(newFilename != NULL);
 
   self->capacity = newCapacity;
   self->sender = newSender;
@@ -53,33 +53,33 @@ void Mail_Realloc(Mail * self)
 }
 
 //===============================================
-bool Mail_IsMail(FILE * fin)
+bool Mail_IsMail(FILE *fin)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
-void Mail_GetSender(FILE * fin, MailAddress sender)
+void Mail_GetSender(FILE *fin, MailAddress sender)
 {
   fscanf(fin, "%s\n", sender);
 }
 
 //===============================================
-void Mail_GetSubject(FILE * fin, Subject subject)
+void Mail_GetSubject(FILE *fin, Subject subject)
 {
   fgets(subject, MAX_SUBJECT_SIZE, fin);
 }
 
 //===============================================
-void Mail_AddMail(Mail * self, Filename filename)
+void Mail_AddMail(Mail *self, Filename filename)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
-void Mail_AddMailsFromDirectory(Mail * self, char * dirName)
+void Mail_AddMailsFromDirectory(Mail *self, char *dirName)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
@@ -103,13 +103,14 @@ bool Mail_IsClean(Mail self, int index)
 //===============================================
 void Mail_Classify(Mail *self, int index, Blocked blocked, Suspected suspected)
 {
-   // TODO
+  // TODO
 }
 
 //===============================================
 void Mail_ClassifyAll(Mail *self, Blocked blocked, Suspected suspected)
 {
-  for (int i=0; i<self->length; i++){
+  for (int i = 0; i < self->length; i++)
+  {
     Mail_Classify(self, i, blocked, suspected);
   }
 }
@@ -117,13 +118,14 @@ void Mail_ClassifyAll(Mail *self, Blocked blocked, Suspected suspected)
 //===============================================
 void Mail_Rename(Mail self, int index)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
 void Mail_RenameAll(Mail self)
 {
-  for (int i=0; i<self.length; i++){
+  for (int i = 0; i < self.length; i++)
+  {
     Mail_Rename(self, i);
   }
 }
@@ -131,8 +133,9 @@ void Mail_RenameAll(Mail self)
 //===============================================
 void Mail_Print(Mail self)
 {
-  for (int i=0; i<self.length; i++){
-    printf ("Sender : %s\nSubject : %s\n", self.sender[i], self.subject[i]);
+  for (int i = 0; i < self.length; i++)
+  {
+    printf("Sender : %s\nSubject : %s\n", self.sender[i], self.subject[i]);
   }
 }
 

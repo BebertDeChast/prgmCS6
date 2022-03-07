@@ -7,18 +7,19 @@
 
 typedef char BlockedAddress[MAX_BLOCKEDADDRESS_SIZE];
 
-typedef struct Blocked {
+typedef struct Blocked
+{
 	int capacity;
-  int length;
+	int length;
 	BlockedAddress *mailAddress;
 } Blocked;
 
-void Blocked_InitEmpty(Blocked * self);
-bool Blocked_IsFull(Blocked  self);
-void Blocked_Realloc(Blocked * self);
-void Blocked_AddAddress(Blocked * self, BlockedAddress mailAddress);
-void Blocked_AddAddressFromFile(Blocked * self, char * filename);
+void Blocked_InitEmpty(Blocked *self);
+bool Blocked_IsFull(Blocked self);
+void Blocked_Realloc(Blocked *self);
+void Blocked_AddAddress(Blocked *self, BlockedAddress mailAddress);
+void Blocked_AddAddressFromFile(Blocked *self, char *filename);
 bool Blocked_IsBlocked(Blocked self, BlockedAddress mailAddress);
-void Blocked_Destroy(Blocked * self);
+void Blocked_Destroy(Blocked *self);
 
 #endif

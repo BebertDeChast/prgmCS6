@@ -6,11 +6,11 @@
 #include "suspected.h"
 
 //===============================================
-void Suspected_InitEmpty(Suspected * self)
+void Suspected_InitEmpty(Suspected *self)
 {
-	self->capacity = 0;
+  self->capacity = 0;
   self->length = 0;
-	self->word = NULL;
+  self->word = NULL;
   self->weight = NULL;
 }
 
@@ -21,16 +21,16 @@ bool Suspected_IsFull(Suspected self)
 }
 
 //===============================================
-void Suspected_Realloc(Suspected * self)
+void Suspected_Realloc(Suspected *self)
 {
   if (self->capacity == 0)
     self->capacity = 1;
 
   int newCapacity = self->capacity * 2;
-  Word * newWord = realloc(self->word, newCapacity * sizeof * newWord);
-  assert (newWord != NULL );
-  int * newWeight = realloc(self->weight, newCapacity * sizeof * newWeight);
-  assert (newWeight != NULL );
+  Word *newWord = realloc(self->word, newCapacity * sizeof *newWord);
+  assert(newWord != NULL);
+  int *newWeight = realloc(self->weight, newCapacity * sizeof *newWeight);
+  assert(newWeight != NULL);
 
   self->capacity = newCapacity;
   self->word = newWord;
@@ -38,7 +38,7 @@ void Suspected_Realloc(Suspected * self)
 }
 
 //===============================================
-void Suspected_AddWordWeight(Suspected * self, Word word, int weight)
+void Suspected_AddWordWeight(Suspected *self, Word word, int weight)
 {
   if (Suspected_IsFull(*self))
     Suspected_Realloc(self);
@@ -49,16 +49,17 @@ void Suspected_AddWordWeight(Suspected * self, Word word, int weight)
 }
 
 //===============================================
-void Suspected_AddWordWeightFromFile(Suspected * self, char * filename)
+void Suspected_AddWordWeightFromFile(Suspected *self, char *filename)
 {
-  FILE * fin;
+  FILE *fin;
   Word word;
   int weight;
 
   fin = fopen(filename, "r");
-  assert (fin != NULL);
+  assert(fin != NULL);
 
-  while (!feof(fin)){
+  while (!feof(fin))
+  {
     fscanf(fin, "%s %d\n", word, &weight);
     Suspected_AddWordWeight(self, word, weight);
   }
@@ -68,23 +69,23 @@ void Suspected_AddWordWeightFromFile(Suspected * self, char * filename)
 //===============================================
 int Suspected_GetWeight(Suspected self, Word word)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
-int Suspected_GetTotalWeight(Suspected self, char * subject)
+int Suspected_GetTotalWeight(Suspected self, char *subject)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
-bool Suspected_IsSuspected(Suspected self, char * subject, int threshold)
+bool Suspected_IsSuspected(Suspected self, char *subject, int threshold)
 {
- // TODO
+  // TODO
 }
 
 //===============================================
-void Suspected_Destroy(Suspected * self)
+void Suspected_Destroy(Suspected *self)
 {
   free(self->word);
   free(self->weight);
