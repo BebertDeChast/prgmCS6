@@ -55,7 +55,7 @@ void Mail_Realloc(Mail *self)
 //===============================================
 bool Mail_IsMail(FILE *fin)
 {
-  char *line[10];
+  char line[10];
   fgets(line, 10, fin);
   return !strcmp(line, "#email");
 }
@@ -75,13 +75,50 @@ void Mail_GetSubject(FILE *fin, Subject subject)
 //===============================================
 void Mail_AddMail(Mail *self, Filename filename)
 {
-  // TODO
+  // * Reading file
+  FILE *file;
+  MailAddress sender;
+  Subject subject;
+  file = fopen(filename, "r");
+  if (!Mail_IsMail(file))
+  {
+    perror("File is not a mail");
+    exit(EXIT_FAILURE);
+  }
+  Mail_GetSender(file, sender);
+  Mail_GetSubject(file, subject);
+
+  // * Filling self with read data
+  if (Mail_IsFull(*self))
+  {
+    Mail_Realloc(self);
+  }
+  strcpy(self->sender[self->length], sender);
+  strcpy(self->subject[self->length], subject);
+  strcpy(self->filename[self->length], filename);
+  self->length++;
+  fclose(file);
 }
 
 //===============================================
 void Mail_AddMailsFromDirectory(Mail *self, char *dirName)
 {
-  // TODO
+  DIR *directory;
+  struct dirent *current_file;
+  struct stat *buffer;
+  directory = opendir(dirName);
+  assert(directory != NULL);
+
+  while ((current_file = readdir(directory)))
+  {
+    int test = stat(current_file->d_name, buffer)
+    assert(test != -1);
+    if (S_ISREG(buffer->st_mode))
+    {
+      Mail_AddMail(self, current_file->d_name);
+    }
+  }
+  closedir(directory);
 }
 
 //===============================================
@@ -105,7 +142,20 @@ bool Mail_IsClean(Mail self, int index)
 //===============================================
 void Mail_Classify(Mail *self, int index, Blocked blocked, Suspected suspected)
 {
-  // TODO
+  assert(index < self->length);
+  self->totalWeight[index] = Suspected_GetTotalWeight(suspected, self->subject[index]);
+  if (Blocked_IsBlocked(blocked, self->sender[index]))
+  {
+    self->classification[index] = BLOCKED;
+  }
+  else if (Suspected_IsSuspected(suspected, self->subject[index], 60))
+  {
+    self->classification[index] = SUSPECTED;
+  }
+  else
+  {
+    self->classification[index] = CLEAN;
+  }
 }
 
 //===============================================
@@ -120,7 +170,23 @@ void Mail_ClassifyAll(Mail *self, Blocked blocked, Suspected suspected)
 //===============================================
 void Mail_Rename(Mail self, int index)
 {
-  // TODO
+  assert(index < self.length);
+  char  *new_name;
+  if (self.classification[index] == CLEAN)
+  {
+    return;
+  }
+
+  if (self.classification[index] == BLOCKED)
+  {
+    new_name = strcat(self.filename[index], "[BLOCKED]");
+  }
+  else if (self.classification[index] == SUSPECTED)
+  {
+    sprintf(new_name, "%s[SUSPECTED %d]", self.filename[index], self.totalWeight[index]);
+  }
+  rename(self.filename[index], new_name);
+  strcpy(self.filename[index], new_name);
 }
 
 //===============================================

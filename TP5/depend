@@ -1,0 +1,5 @@
+moviesuggestion.o: moviesuggestion.c movietable.h movie.h tree.h node.h
+movietable.o: movietable.c movietable.h movie.h
+node.o: node.c node.h
+movie.o: movie.c movie.h
+tree.o: tree.c tree.h node.h movie.h movietable.h
