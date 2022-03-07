@@ -18,7 +18,8 @@ Movie *Movie_AllocEmpty()
 //===============================================
 void Movie_GenreRealloc(Movie *self)
 {
-  self->genre = realloc(self->genre, (self->numberOfGenre + 1) * sizeof self->genre);
+  self->genre = realloc(self->genre, (self->numberOfGenre + 1) * sizeof(GenreType));
+  assert (self->genre != NULL);
 }
 
 //===============================================
@@ -45,8 +46,8 @@ void Movie_AddGenre(Movie *self, GenreType genre)
 Movie *Movie_CreateMovieFromLine(char *line)
 {
   Movie *newMovie = Movie_AllocEmpty();
-  char *newline = strdup(line);
-  char *ptr = strtok(newline, ",");
+  char *newline = (char *)malloc(LINE_MAX_SIZE);
+  char *ptr = strtok(line, ",");
   Movie_SetID(newMovie, atoi(ptr));
 
   ptr = strtok(NULL, "\"");
@@ -78,6 +79,9 @@ void Movie_Print(Movie self, FILE *fout)
 //===============================================
 void Movie_Destroy(Movie *self)
 {
-  free(self->genre);
+  if (self->genre != NULL)
+  {
+    free(self->genre);
+  }
   free(self);
 }

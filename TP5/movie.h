@@ -2,6 +2,7 @@
 #ifndef MOVIE_H
 #define MOVIE_H
 
+#define LINE_MAX_SIZE 256*10
 #define MOVIE_TITLE_MAX_SIZE 256
 typedef char MovieTitle[MOVIE_TITLE_MAX_SIZE];
 

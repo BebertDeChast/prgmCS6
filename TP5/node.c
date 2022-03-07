@@ -8,7 +8,7 @@
 Node *Node_AllocEmpty()
 {
   Node *node;
-  node = malloc(sizeof *node);
+  node = malloc(sizeof * node);
   node->isWordEnd = false;
   node->movieID = -1;
   for (int i = 0; i < ALPHABET_SIZE; i++)

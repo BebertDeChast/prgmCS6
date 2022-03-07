@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
   movieTable = MovieTable_AllocEmpty();
 
   MovieTable_ReadMoviesFromFile(movieTable, argv[1]);
-  MovieTable_Print(*movieTable, stdout);
+  // MovieTable_Print(*movieTable, stdout);
 
   printf("==================\n");
 
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   Tree_CreateFromMovieTable(&tree, *movieTable);
   printf("Tree size : %d\n", Tree_GetSize(tree));
 
-  Tree_Print(tree, stdout);
+  // Tree_Print(tree, stdout);
   while (1)
   {
     printf("Entry your query: ");
