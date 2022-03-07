@@ -57,6 +57,7 @@ void Blocked_AddAddressFromFile(Blocked *self, char *filename)
   {
     if (strlen(address) > 1)
     {
+      address[strlen(address) - 1] = '\0'; // ! Remove  pesky '\n' from address 
       Blocked_AddAddress(self, address);
     }
   }
@@ -68,6 +69,7 @@ bool Blocked_IsBlocked(Blocked self, BlockedAddress mailAddress)
 {
   for (int i = 0; i < self.length; i++)
   {
+    // printf("Comparing %s with %s\n ", self.mailAddress[i], mailAddress);
     if (!strcmp(self.mailAddress[i], mailAddress))
     {
       return true;

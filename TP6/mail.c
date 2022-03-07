@@ -57,7 +57,7 @@ bool Mail_IsMail(FILE *fin)
 {
   char line[10];
   fgets(line, 10, fin);
-  return !strcmp(line, "#email");
+  return !strcmp(line, "#email\n");
 }
 
 //===============================================
@@ -105,17 +105,18 @@ void Mail_AddMailsFromDirectory(Mail *self, char *dirName)
 {
   DIR *directory;
   struct dirent *current_file;
-  struct stat *buffer;
+  struct stat buffer;
+  Filename filename;
   directory = opendir(dirName);
   assert(directory != NULL);
 
   while ((current_file = readdir(directory)))
   {
-    int test = stat(current_file->d_name, buffer)
-    assert(test != -1);
-    if (S_ISREG(buffer->st_mode))
+    sprintf(filename, "%s/%s", dirName, current_file->d_name);
+    assert(stat(filename, &buffer) != -1);
+    if (S_ISREG(buffer.st_mode))
     {
-      Mail_AddMail(self, current_file->d_name);
+      Mail_AddMail(self, filename);
     }
   }
   closedir(directory);
@@ -171,7 +172,7 @@ void Mail_ClassifyAll(Mail *self, Blocked blocked, Suspected suspected)
 void Mail_Rename(Mail self, int index)
 {
   assert(index < self.length);
-  char  *new_name;
+  Filename new_name;
   if (self.classification[index] == CLEAN)
   {
     return;
@@ -179,7 +180,7 @@ void Mail_Rename(Mail self, int index)
 
   if (self.classification[index] == BLOCKED)
   {
-    new_name = strcat(self.filename[index], "[BLOCKED]");
+    sprintf(new_name, "%s[BLOCKED]", self.filename[index]);
   }
   else if (self.classification[index] == SUSPECTED)
   {
