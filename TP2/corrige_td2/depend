@@ -1,0 +1,3 @@
+calc.o: calc.c expression.h composition.h
+composition.o: composition.c composition.h expression.h
+expression.o: expression.c expression.h
