@@ -1,4 +1,4 @@
-# file: Makefile
+# file: Makefile mono
 
 SHELL  = /bin/bash
 CC     = gcc
@@ -7,8 +7,8 @@ LIBS   = -lm
 
 EXEC = main
 TARGET_DIR = bin
-HEADERS = $(wildcard *.h)
-SOURCES = $(wildcard *.c)
+HEADERS = $($(EXEC) *.h)
+SOURCES = $($(EXEC) *.c)
 MODULES = $(basename $(SOURCES))
 OBJECTS = $(addsuffix .o , $(MODULES))
 

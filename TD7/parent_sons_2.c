@@ -3,7 +3,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
     int status;
     pid_t pid;

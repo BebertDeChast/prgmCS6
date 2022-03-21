@@ -3,7 +3,7 @@
 #include <sys/wait.h>
 #include <stdio.h>
 
-int main()
+int main(void)
 {
     pid_t son1, son2, son3;
     son1 = fork();
