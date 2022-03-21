@@ -24,7 +24,7 @@ void checkSyntax(int argc, char *argv[])
 {
   int do_index = wordIndex(argc, argv, "--do");
   int done_index = wordIndex(argc, argv, "--done");
-  if ((do_index > 1 && done_index > do_index + 1))
+  if ((do_index > 1 && done_index > do_index + 1 && done_index == argc - 1))
   {
     return;
   }
