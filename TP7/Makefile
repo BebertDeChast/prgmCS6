@@ -5,7 +5,7 @@ CC     = gcc
 CFLAGS = -W -Wall
 LIBS   = -lm
 
-EXEC = my
+EXEC = mywhile
 TARGET_DIR = bin
 HEADERS = $(wildcard *.h)
 SOURCES = $(wildcard *.c)
