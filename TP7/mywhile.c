@@ -6,19 +6,19 @@
 #include <string.h>
 
 //===============================================
-int wordIndex (int argc, char *argv[], char *word)
+int wordIndex(int argc, char *argv[], char *word)
 {
   // TODO
 }
 
 //===============================================
-void checkSyntax (int argc, char *argv[])
+void checkSyntax(int argc, char *argv[])
 {
   // TODO
 }
 
 //===============================================
-void runCommand (char *argv[], int ind1, int ind2)
+void runCommand(char *argv[], int ind1, int ind2)
 {
   // TODO
 }
@@ -31,7 +31,7 @@ int runAll(int argc, char *argv[])
 
 //===============================================
 //===============================================
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
   checkSyntax(argc, argv);
   runAll(argc, argv);
