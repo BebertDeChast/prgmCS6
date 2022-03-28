@@ -41,7 +41,7 @@ void secondPipe(int inpipe[2], int outpipe[2])
     close(outpipe[0]);
     char buffer[2048];
     read(inpipe[0], buffer, sizeof(buffer));
-    int s_buffer = strlen(buffer) - 1;
+    int s_buffer = strlen(buffer);
     char sentence[s_buffer + 1];
     strcpy(sentence, buffer);
     for (int i = 0; i < s_buffer; i++)
@@ -73,7 +73,7 @@ void thirdPipe(int inpipe[2])
     close(inpipe[1]);
     char buffer[2048];
     read(inpipe[0], buffer, sizeof(buffer));
-    int s_buffer = strlen(buffer) - 1;
+    int s_buffer = strlen(buffer);
     char sentence[s_buffer + 1];
     strcpy(sentence, buffer);
     for (int i = 0; i < s_buffer; i++)
