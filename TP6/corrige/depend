@@ -1,0 +1,4 @@
+blocked.o: blocked.c blocked.h
+suspected.o: suspected.c suspected.h
+mail.o: mail.c mail.h blocked.h suspected.h
+spamhunter.o: spamhunter.c blocked.h suspected.h mail.h
