@@ -35,12 +35,12 @@ void Clienttable_Realloc(Clienttable *self)
     self->capacity = 1;
 
   int newCapacity = self->capacity * 2;
-  pid_t * newpid = realloc(self->pid, newCapacity * sizeof (pid_t));
-  assert (newpid != NULL );
-  int * newfrompipe = realloc(self->frompipe, newCapacity * sizeof (int));
-  assert (newfrompipe != NULL );
-  int * newtopipe = realloc(self->topipe, newCapacity * sizeof (int));
-  assert (newtopipe != NULL );
+  pid_t *newpid = realloc(self->pid, newCapacity * sizeof(pid_t));
+  assert(newpid != NULL);
+  int *newfrompipe = realloc(self->frompipe, newCapacity * sizeof(int));
+  assert(newfrompipe != NULL);
+  int *newtopipe = realloc(self->topipe, newCapacity * sizeof(int));
+  assert(newtopipe != NULL);
 
   self->capacity = newCapacity;
   self->pid = newpid;
@@ -61,7 +61,7 @@ void Clienttable_AddClient(Clienttable *self, pid_t clientpid)
 //===============================================
 int Clienttable_GetClientIndex(Clienttable *self, pid_t clientpid)
 {
-  for (int i=0; i<self->numberOfClients; i++)
+  for (int i = 0; i < self->numberOfClients; i++)
     if (self->pid[i] == clientpid)
       return i;
 
@@ -71,31 +71,49 @@ int Clienttable_GetClientIndex(Clienttable *self, pid_t clientpid)
 //===============================================
 void Clienttable_OpenPipes(Clienttable *self, pid_t clientpid)
 {
-// TODO
+  char *to_pipard;
+  char *from_pipard;
+  sprintf(to_pipard, "to%d", clientpid);
+  sprintf(from_pipard, "from%d", clientpid);
+
+  mkfifo(to_pipard, 755);
+  mkfifo(from_pipard, 755);
+
+  int pipeWrite = open(to_pipard, O_WRONLY);
+  int pipeRead = open(from_pipard, O_RDONLY);
+
+  int index = Clienttable_GetClientIndex(self, clientpid);
+  self->frompipe[index] = pipeRead;
+  self->topipe[index] = pipeWrite;
 }
 
 //===============================================
 void Clienttable_ClosePipes(Clienttable *self, pid_t clientpid)
 {
-// TODO
+  int index = Clienttable_GetClientIndex(self, clientpid);
+  close(self->frompipe[index]);
+  close(self->topipe[index]);
 }
 
 //===============================================
 int Clienttable_GetFromPipe(Clienttable *self, pid_t clientpid)
 {
-// TODO
+  int index = Clienttable_GetClientIndex(self, clientpid);
+  return self->frompipe[index];
 }
 
 //===============================================
 int Clienttable_GetToPipe(Clienttable *self, pid_t clientpid)
 {
-// TODO
+  int index = Clienttable_GetClientIndex(self, clientpid);
+  return self->topipe[index];
 }
 
 //===============================================
 void Clienttable_Destroy(Clienttable *self)
 {
-  for (int i=0; i<self->numberOfClients; i++){
+  for (int i = 0; i < self->numberOfClients; i++)
+  {
     close(self->frompipe[i]);
     close(self->topipe[i]);
   }

@@ -9,7 +9,6 @@
 #include <assert.h>
 #include "process.h"
 
-
 //===============================================
 void Process_Init(Process *self)
 {
@@ -33,12 +32,12 @@ void Process_Realloc(Process *self)
     self->capacity = 1;
 
   int newCapacity = self->capacity * 2;
-  pid_t * newPid = realloc(self->clientPid, newCapacity * sizeof (pid_t));
-  assert (newPid != NULL );
-  int * newStatus = realloc(self->status, newCapacity * sizeof (int));
-  assert (newStatus != NULL );
-  Command * newCommand = realloc(self->command, newCapacity * sizeof (Command));
-  assert (newCommand != NULL );
+  pid_t *newPid = realloc(self->clientPid, newCapacity * sizeof(pid_t));
+  assert(newPid != NULL);
+  int *newStatus = realloc(self->status, newCapacity * sizeof(int));
+  assert(newStatus != NULL);
+  Command *newCommand = realloc(self->command, newCapacity * sizeof(Command));
+  assert(newCommand != NULL);
 
   self->capacity = newCapacity;
   self->clientPid = newPid;
@@ -49,20 +48,34 @@ void Process_Realloc(Process *self)
 //===============================================
 void Process_AddCommand(Process *self, Command com)
 {
-// TODO
+  if (Process_IsFull(self))
+  {
+    Process_Realloc(self);
+  }
+  strcpy(self->command[self->numberOfProcess], com);
+  self->status[self->numberOfProcess] = -1;
+  self->clientPid[self->numberOfProcess] = 0;
+  self->numberOfProcess++;
 }
 
 //===============================================
 int Process_GetIndexOfUnattributedCommand(Process *self)
 {
-// TODO
+  for (int i = 0; i < self->numberOfProcess; i++)
+  {
+    if (self->clientPid[i] == 0)
+    {
+      return i;
+    }
+  }
+  return -1;
 }
 
 //===============================================
 int Process_GetIndexOfClientPid(Process *self, pid_t clientpid)
 {
-  for (int i=0; i<self->numberOfProcess; i++)
-    if (self->clientPid[i]==clientpid)
+  for (int i = 0; i < self->numberOfProcess; i++)
+    if (self->clientPid[i] == clientpid)
       return i;
 
   return -1;
@@ -71,25 +84,33 @@ int Process_GetIndexOfClientPid(Process *self, pid_t clientpid)
 //===============================================
 void Process_WriteCommandToPipe(Process *self, int index, int clientpipe)
 {
-// TODO
+  char sentence[2048];
+  sprintf(sentence, "%d%s", index, self->command[index]);
+  write(clientpipe, sentence, strlen(sentence));
 }
 
 //===============================================
 void Process_ReadStatusFromPipe(Process *self, int clientpipe)
 {
-// TODO
+  char sentence[2048];
+  read(clientpipe, sentence, sizeof(int));
+  int index = atoi(sentence);
+  read(clientpipe, sentence, sizeof(int));
+  int status = atoi(sentence);
+  self->status[index] = status;
 }
 
 //===============================================
 void Process_SetCommandToClient(Process *self, int index, pid_t clientpid)
 {
-// TODO
+  self->clientPid[index] = clientpid;
 }
 
 //===============================================
 void Process_PrintStatus(Process *self)
 {
-  for (int i=0; i<self->numberOfProcess; i++){
+  for (int i = 0; i < self->numberOfProcess; i++)
+  {
     printf("%s - %d\n", self->command[i], self->status[i]);
   }
 }
