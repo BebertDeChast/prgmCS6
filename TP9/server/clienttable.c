@@ -71,8 +71,8 @@ int Clienttable_GetClientIndex(Clienttable *self, pid_t clientpid)
 //===============================================
 void Clienttable_OpenPipes(Clienttable *self, pid_t clientpid)
 {
-  char *to_pipard;
-  char *from_pipard;
+  char to_pipard[64];
+  char from_pipard[64];
   sprintf(to_pipard, "to%d", clientpid);
   sprintf(from_pipard, "from%d", clientpid);
 

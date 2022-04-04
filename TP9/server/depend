@@ -1,3 +1,0 @@
-clienttable.o: clienttable.c clienttable.h
-server.o: server.c process.h clienttable.h
-process.o: process.c process.h
