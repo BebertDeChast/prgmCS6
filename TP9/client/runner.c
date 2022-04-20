@@ -17,7 +17,7 @@ int mysignal(int sig, void (*h)(int), int options)
     struct sigaction s;
     s.sa_handler = h;
     sigemptyset(&s.sa_mask);
-    s.sa_flags = options;
+    s.sa_flags = SA_SIGINFO | options;
     int r = sigaction(sig, &s, NULL);
     if (r < 0)
         perror(__func__);
@@ -60,8 +60,9 @@ int main (int argc, char *argv[])
   pause();
 
   printf("[DEBUG] Signal has been acquired with server !\n");
-  int pipeWrite = open(to_pipard, O_WRONLY);
-  int pipeRead = open(from_pipard, O_RDONLY);
+  int pipeRead = open(to_pipard, O_RDONLY | O_NONBLOCK);
+  int pipeWrite = open(from_pipard, O_WRONLY | O_NONBLOCK);
+  printf("[DEBUG] Pipes are open, starting loop.\n");
   while(1) {
     sleep(1);
     Command_AskForCommand(server_pid);

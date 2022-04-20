@@ -58,6 +58,7 @@ void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid)
   union sigval value ;
   value.sival_int = 2;
   sigqueue(serverpid, SIGUSR2, value);
+  printf("[DEBUG] Sent SIGUSR2 signal with payload 2 to %d\n", serverpid);
 }
 
 //===============================================

@@ -22,7 +22,7 @@ int mysignal(int sig, void (*h)(int, siginfo_t *, void *), int options)
   struct sigaction s;
   s.sa_sigaction = h;
   sigemptyset(&s.sa_mask);
-  s.sa_flags = options;
+  s.sa_flags = SA_SIGINFO | options;
   int r = sigaction(sig, &s, NULL);
   if (r < 0)
     perror(__func__);
@@ -47,10 +47,12 @@ void handlerClient(int sig, siginfo_t *info, void *ctx)
 //===============================================
 void handlerCommand(int sig, siginfo_t *info, void *ctx)
 {
+  printf("[DEBUG] SIGUSR2 received.\n");
   if (info->si_code == SI_QUEUE)
   {
     int clientIndex;
     int pipe;
+    printf("[DEBUG] Payload received : %d\n", info->si_value.sival_int);
     switch (info->si_value.sival_int)
     {
     case 1:
