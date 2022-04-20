@@ -88,6 +88,11 @@ int main()
   while (1)
   {
     fgets(cmd, MAX_COMMAND_SIZE, stdin);
+    cmd[strlen(cmd) - 1] = '\0'; // ! Removed the 'ENTER' character registered upon validation of the command
+    // DEBUG
+    sleep(1);
+    printf("[DEBUG] Command received : \n[DEBUG] %s\n[DEBUG]---\n", cmd);
+    // DEBUG
     if (strlen(cmd) <= 0)
     {
       Process_PrintStatus(&process);
