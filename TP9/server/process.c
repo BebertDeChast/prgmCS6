@@ -85,7 +85,7 @@ int Process_GetIndexOfClientPid(Process *self, pid_t clientpid)
 void Process_WriteCommandToPipe(Process *self, int index, int clientpipe)
 {
   char sentence[MAX_COMMAND_SIZE];
-  sprintf(sentence, "%d%s", index, self->command[index]);
+  sprintf(sentence, "%d-%s", index, self->command[index]);
   write(clientpipe, sentence, strlen(sentence));
 }
 

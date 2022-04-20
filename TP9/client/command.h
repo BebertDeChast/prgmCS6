@@ -14,7 +14,7 @@ typedef struct Command {
 
 void Command_Init(Command *self);
 void Command_Reset(Command *self);
-int Command_ReadCommandFromPipe(Command *self, int pipe);
+void Command_ReadCommandFromPipe(Command *self, int pipe);
 void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid);
 void Command_AskForCommand(pid_t serverpid);
 void Command_CountCommandArg(Command *self);

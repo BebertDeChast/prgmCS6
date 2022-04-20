@@ -36,21 +36,36 @@ void Command_Reset(Command *self)
 }
 
 //===============================================
-int Command_ReadCommandFromPipe(Command *self, int pipe)
+void Command_ReadCommandFromPipe(Command *self, int pipe)
 {
-// TODO
+  char sentence[MAX_COMMAND_SIZE];
+  read(pipe, sentence, MAX_COMMAND_SIZE * sizeof(sentence));
+  int index;
+  char command[MAX_COMMAND_SIZE];
+  sscanf(sentence, "%d-%s", &index, command);
+  self->commandNumber = index;
+  if (index >= 0) {
+    strcpy(self->commandline, command);
+  }
 }
 
 //===============================================
 void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid)
 {
-// TODO
+  write(pipe, &self->commandNumber, sizeof(int));
+  write(pipe, &self->exitStatus, sizeof(int));
+
+  union sigval value ;
+  value.sival_int = 2;
+  sigqueue(serverpid, SIGUSR2, value);
 }
 
 //===============================================
 void Command_AskForCommand(pid_t serverpid)
 {
-// TODO
+  union sigval value ;
+  value.sival_int = 1;
+  sigqueue(serverpid, SIGUSR2, value);
 }
 
 //===============================================
