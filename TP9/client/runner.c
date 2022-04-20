@@ -42,6 +42,7 @@ int main (int argc, char *argv[])
   Command_Init(&command);
   mysignal(SIGALRM, &handlerAlarm, SA_RESTART);
   int server_pid = atoi(argv[1]);
+  printf("[DEBUG] Input server's pid : %d\n", server_pid);
 
   char to_pipard[64];
   char from_pipard[64];
@@ -53,10 +54,12 @@ int main (int argc, char *argv[])
   mkfifo(from_pipard, 755);
 
   union sigval value ;
-  value.sival_int = 0;
+  value.sival_int = getpid();
+  printf("[DEBUG] SIGUSR1 sent to %d with payload %d\n", server_pid, getpid());
   sigqueue(server_pid, SIGUSR1, value);
   pause();
 
+  printf("[DEBUG] Signal has been acquired with server !\n");
   int pipeWrite = open(to_pipard, O_WRONLY);
   int pipeRead = open(from_pipard, O_RDONLY);
   while(1) {
@@ -73,6 +76,7 @@ int main (int argc, char *argv[])
     }
     
   }
+  printf("[DEBUG] Closing everything hopefully.\n");
   close(pipeWrite);
   close(pipeRead);
 }

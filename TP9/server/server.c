@@ -32,11 +32,14 @@ int mysignal(int sig, void (*h)(int, siginfo_t *, void *), int options)
 //===============================================
 void handlerClient(int sig, siginfo_t *info, void *ctx)
 {
+  printf("[DEBUG] SIGUSR1 received\n");
   if (info->si_code == SI_QUEUE)
   {
     int pid = (int)info->si_pid;
+    printf("[DEBUG] Payload received: %d\n", pid);
     Clienttable_AddClient(&clienttable, pid);
     kill(pid, SIGALRM);
+    printf("[DEBUG] SIGALRM sent to %d\n", pid);
     Clienttable_OpenPipes(&clienttable, pid);
   }
 }
