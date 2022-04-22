@@ -78,6 +78,6 @@ int main (int argc, char *argv[])
     
   }
   printf("[DEBUG] Closing everything hopefully.\n");
-  close(pipeWrite);
-  close(pipeRead);
+  unlink(to_pipard);
+  unlink(from_pipard);
 }
