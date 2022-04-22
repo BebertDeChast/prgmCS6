@@ -63,7 +63,7 @@ int main (int argc, char *argv[])
   int pipeRead = open(to_pipard, O_RDONLY | O_NONBLOCK);
   int pipeWrite = open(from_pipard, O_WRONLY | O_NONBLOCK);
   printf("[DEBUG] Pipes are open, starting loop.\n");
-  while(1) {
+  while(kill(server_pid, 0) >= 0) {
     sleep(1);
     Command_AskForCommand(server_pid);
     Command_Reset(&command);

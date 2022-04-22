@@ -90,9 +90,8 @@ int main()
   mysignal(SIGUSR2, &handlerCommand, SA_RESTART);
 
   char cmd[MAX_COMMAND_SIZE];
-  while (1)
+  while (fgets(cmd, MAX_COMMAND_SIZE, stdin) != NULL)
   {
-    fgets(cmd, MAX_COMMAND_SIZE, stdin);
     cmd[strlen(cmd) - 1] = '\0'; // ! Removed the 'ENTER' character registered upon validation of the command
     // DEBUG
     sleep(1);
