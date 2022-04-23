@@ -39,10 +39,12 @@ void Command_Reset(Command *self)
 void Command_ReadCommandFromPipe(Command *self, int pipe)
 {
   char sentence[MAX_COMMAND_SIZE];
-  read(pipe, sentence, MAX_COMMAND_SIZE * sizeof(sentence));
+  read(pipe, sentence, sizeof(sentence));
+  printf("[DEBUG] Received from pipe %d : %s\n", pipe, sentence);
   int index;
   char command[MAX_COMMAND_SIZE];
-  sscanf(sentence, "%d-%s", &index, command);
+  sscanf(sentence, "%d_%s", &index, command);
+  printf("[DEBUG] Separated index & command : %d_%s\n", index, command);
   self->commandNumber = index;
   if (index >= 0) {
     strcpy(self->commandline, command);

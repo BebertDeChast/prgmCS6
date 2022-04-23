@@ -47,11 +47,16 @@ int main (int argc, char *argv[])
   char to_pipard[64];
   char from_pipard[64];
   int clientpid = getpid();
-  sprintf(to_pipard, "to%d", clientpid);
-  sprintf(from_pipard, "from%d", clientpid);
+  sprintf(to_pipard, "../pipes/to%d", clientpid);
+  sprintf(from_pipard, "../pipes/from%d", clientpid);
 
-  mkfifo(to_pipard, 755);
-  mkfifo(from_pipard, 755);
+  if (mkfifo(to_pipard, 0777) == -1) {
+    perror("pipe creation");
+  }
+  if (mkfifo(from_pipard, 0777) == -1)
+ {
+   perror("pipe creation");
+ } 
 
   union sigval value ;
   value.sival_int = getpid();
@@ -61,10 +66,10 @@ int main (int argc, char *argv[])
 
   printf("[DEBUG] Signal has been acquired with server !\n");
   int pipeRead = open(to_pipard, O_RDONLY | O_NONBLOCK);
-  int pipeWrite = open(from_pipard, O_WRONLY | O_NONBLOCK);
-  printf("[DEBUG] Pipes are open, starting loop.\n");
+  int pipeWrite = open(from_pipard, O_WRONLY);
+  printf("[DEBUG] Pipes are open, starting loop.\n read : %d \n write : %d \n", pipeRead,pipeWrite);
   while(kill(server_pid, 0) >= 0) {
-    sleep(1);
+    sleep(5);
     Command_AskForCommand(server_pid);
     Command_Reset(&command);
     Command_ReadCommandFromPipe(&command, pipeRead);
@@ -73,11 +78,12 @@ int main (int argc, char *argv[])
       Command_WriteExitStatusOnPipe(&command, pipeWrite, server_pid);
     } else {
       sleep(10);
-      printf("[DEBUG] Invalid command received.\n");
+      printf("[DEBUG] No command received.\n");
     }
     
   }
   printf("[DEBUG] Closing everything hopefully.\n");
   unlink(to_pipard);
   unlink(from_pipard);
+  return 0;
 }

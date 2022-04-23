@@ -73,14 +73,13 @@ void Clienttable_OpenPipes(Clienttable *self, pid_t clientpid)
 {
   char to_pipard[64];
   char from_pipard[64];
-  sprintf(to_pipard, "to%d", clientpid);
-  sprintf(from_pipard, "from%d", clientpid);
+  sprintf(to_pipard, "../pipes/to%d", clientpid);
+  sprintf(from_pipard, "../pipes/from%d", clientpid);
 
-  mkfifo(to_pipard, 755);
-  mkfifo(from_pipard, 755);
+  int pipeRead = open(from_pipard, O_RDONLY | O_NONBLOCK);
+  int pipeWrite = open(to_pipard, O_WRONLY);  
 
-  int pipeWrite = open(to_pipard, O_WRONLY);
-  int pipeRead = open(from_pipard, O_RDONLY);
+  printf("[DEBUG] Pipes are open.\nRead : %d \nWrite : %d \n", pipeRead,pipeWrite);
 
   int index = Clienttable_GetClientIndex(self, clientpid);
   self->frompipe[index] = pipeRead;

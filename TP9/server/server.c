@@ -55,22 +55,27 @@ void handlerCommand(int sig, siginfo_t *info, void *ctx)
     printf("[DEBUG] Payload received : %d\n", info->si_value.sival_int);
     switch (info->si_value.sival_int)
     {
-    case 1:
+    case 1: // demande de commande
       clientIndex = Clienttable_GetClientIndex(&clienttable, (int)info->si_pid);
       pipe = Clienttable_GetToPipe(&clienttable, clientIndex);
 
       int cmdindex = Process_GetIndexOfUnattributedCommand(&process);
       if (cmdindex == -1)
       {
-        write(pipe, &cmdindex, sizeof(cmdindex));
+        printf("[DEBUG] No command to send...\n");
+        char dummy[1024];
+        sprintf(dummy, "-1_notacommand\0");
+        printf("[DEBUG] Sending : %s to pipe %d \n", dummy, pipe);
+        write(pipe, dummy, sizeof(dummy));
       }
       else
       {
+        printf("[DEBUG] Sending command...\n");
         Process_SetCommandToClient(&process, cmdindex, info->si_pid);
         Process_WriteCommandToPipe(&process, cmdindex, pipe);
       }
       break;
-    case 2:
+    case 2: // recoit valeur de retour 
       clientIndex = Clienttable_GetClientIndex(&clienttable, (int)info->si_pid);
       pipe = Clienttable_GetFromPipe(&clienttable, clientIndex);
       Process_ReadStatusFromPipe(&process, pipe);
@@ -90,6 +95,7 @@ int main()
   mysignal(SIGUSR2, &handlerCommand, SA_RESTART);
 
   char cmd[MAX_COMMAND_SIZE];
+  printf("[DEBUG] Awaiting for a command...\n");
   while (fgets(cmd, MAX_COMMAND_SIZE, stdin) != NULL)
   {
     cmd[strlen(cmd) - 1] = '\0'; // ! Removed the 'ENTER' character registered upon validation of the command
@@ -103,6 +109,7 @@ int main()
       exit(0);
     }
     Process_AddCommand(&process, cmd);
+    printf("[DEBUG] Awaiting for a new command...\n");
   };
   return 0;
 }
