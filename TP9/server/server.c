@@ -32,22 +32,23 @@ int mysignal(int sig, void (*h)(int, siginfo_t *, void *), int options)
 //===============================================
 void handlerClient(int sig, siginfo_t *info, void *ctx)
 {
-  printf("[DEBUG] SIGUSR1 received\n");
+  // printf("[DEBUG] SIGUSR1 received\n");
   if (info->si_code == SI_QUEUE)
   {
     int pid = (int)info->si_pid;
-    printf("[DEBUG] Payload received: %d\n", pid);
+    // printf("[DEBUG] Payload received: %d\n", pid);
     Clienttable_AddClient(&clienttable, pid);
     kill(pid, SIGALRM);
-    printf("[DEBUG] SIGALRM sent to %d\n", pid);
+    // printf("[DEBUG] SIGALRM sent to %d\n", pid);
     Clienttable_OpenPipes(&clienttable, pid);
+    printf("[INFO] Client %d connected\n",pid);
   }
 }
 
 //===============================================
 void handlerCommand(int sig, siginfo_t *info, void *ctx)
 {
-  printf("[DEBUG] SIGUSR2 received.\n");
+  // printf("[DEBUG] SIGUSR2 received.\n");
   if (info->si_code == SI_QUEUE)
   {
     int pipe;
@@ -55,27 +56,27 @@ void handlerCommand(int sig, siginfo_t *info, void *ctx)
     switch (info->si_value.sival_int)
     {
     case 1: // demande de commande
-      printf("[DEBUG] Asked for command by runner %d\n",(int)info->si_pid);
+      // printf("[DEBUG] Asked for command by runner %d\n",(int)info->si_pid);
       pipe = Clienttable_GetToPipe(&clienttable, (int)info->si_pid);
 
       int cmdindex = Process_GetIndexOfUnattributedCommand(&process);
       if (cmdindex == -1)
       {
         // printf("[DEBUG] No command to send\n");
-        char dummy[8];
-        sprintf(dummy, "-1_abcd");
+        char dummy[3];
+        sprintf(dummy, "-1");
         // printf("[DEBUG] Sending : %s to pipe %d \n", dummy, pipe);
         write(pipe, dummy, sizeof(dummy));
       }
       else
       {
-        printf("[DEBUG] Sending command\n");
+        printf("[INFO] Sending command %d to client %d\n",cmdindex,info->si_pid);
         Process_SetCommandToClient(&process, cmdindex, info->si_pid);
         Process_WriteCommandToPipe(&process, cmdindex, pipe);
       }
       break;
     case 2: // recoit valeur de retour 
-      printf("[DEBUG] Result by runner %d\n",(int)info->si_pid);
+      // printf("[DEBUG] Result by runner %d\n",(int)info->si_pid);
       pipe = Clienttable_GetFromPipe(&clienttable, (int)info->si_pid);
       Process_ReadStatusFromPipe(&process, pipe);
       break;
@@ -88,21 +89,21 @@ int main()
 {
   Clienttable_Init(&clienttable);
   Process_Init(&process);
-  printf("Server's PID : %d\n", getpid());
+  printf("[INFO] Server's PID : %d\n", getpid());
 
   mysignal(SIGUSR1, &handlerClient, SA_RESTART);
   mysignal(SIGUSR2, &handlerCommand, SA_RESTART);
 
   char cmd[MAX_COMMAND_SIZE];
-  printf("[DEBUG] Awaiting for a command...\n");
+  printf("[INFO] Awaiting for a command...\n");
   while (fgets(cmd, MAX_COMMAND_SIZE, stdin) != NULL)
   {
-    cmd[strlen(cmd) - 1] = '\0'; // ! Removed the 'ENTER' character registered upon validation of the command
+    cmd[strlen(cmd) - 1] = '\0'; // * Removed the 'ENTER' character registered upon validation of the command
     sleep(1);
-    printf("[DEBUG] Command added : \n[DEBUG] %s\n[DEBUG]---\n", cmd);
+    // printf("[DEBUG] Command added : \n[DEBUG] %s\n[DEBUG]---\n", cmd);
     Process_AddCommand(&process, cmd);
-    printf("[DEBUG] Awaiting for a new command...\n");
   };
   Process_PrintStatus(&process);
+  printf("[INFO] End of process.\nThank you for choosing MPCI\u00A9\n");
   return 0;
 }

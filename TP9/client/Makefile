@@ -15,6 +15,7 @@ $(EXEC): $(OBJECTS)
 	@echo === GENERATING PROGRAM $@ ===
 	$(CC) $^ $(LIBS) -o $@
 	make clean
+	@echo === SUCCESS ===
 
 %.o : %.c
 	@echo === COMPILING $@ ===

@@ -42,7 +42,7 @@ int main (int argc, char *argv[])
   Command_Init(&command);
   mysignal(SIGALRM, &handlerAlarm, SA_RESTART);
   int server_pid = atoi(argv[1]);
-  printf("[DEBUG] Input server's pid : %d\n", server_pid);
+  // printf("[DEBUG] Input server's pid : %d\n", server_pid);
 
   char to_pipard[64];
   char from_pipard[64];
@@ -60,14 +60,16 @@ int main (int argc, char *argv[])
 
   union sigval value ;
   value.sival_int = getpid();
-  printf("[DEBUG] SIGUSR1 sent to %d with payload %d\n", server_pid, getpid());
+  // printf("[DEBUG] SIGUSR1 sent to %d with payload %d\n", server_pid, getpid());
   sigqueue(server_pid, SIGUSR1, value);
   pause();
 
-  printf("[DEBUG] Signal has been acquired with server !\n");
+  // printf("[DEBUG] Signal has been acquired with server !\n");
   int pipeRead = open(to_pipard, O_RDONLY | O_NONBLOCK);
   int pipeWrite = open(from_pipard, O_WRONLY);
-  printf("[DEBUG] Pipes are open, starting loop.\n");
+  if (pipeRead == -1| pipeWrite == -1){perror("Pipe unreachable");}
+  // printf("[DEBUG] Pipes are open, starting loop.\n");
+  printf("[INFO] Connected to server %d\nReady to proceed\n",server_pid);
   sleep(1);
   while(kill(server_pid, 0) >= 0) {
     Command_AskForCommand(server_pid);
@@ -75,17 +77,19 @@ int main (int argc, char *argv[])
     sleep(1);
     Command_ReadCommandFromPipe(&command, pipeRead);
     if (command.commandNumber >= 0) {
-      printf("[DEBUG] Executing a command :\n");
+      // printf("[DEBUG] Executing a command :\n");
+      printf("\n[INFO] Executing command %d\n", command.commandNumber);
       Command_Execute(&command);
-      printf("\n[DEBUG] Finished executing command, send exit status.\n");
+      // printf("\n[DEBUG] Finished executing command, send exit status.\n");
       Command_WriteExitStatusOnPipe(&command, pipeWrite, server_pid);
+      sleep(4);
     } else {
-      printf("[DEBUG] No command received.\n");
+      // printf("[DEBUG] No command received.\n");
       sleep(10);
     }
     
   }
-  printf("[DEBUG] Closing everything hopefully.\n");
+  printf("[INFO] Shutting down. Deleting pipes.\n");
   unlink(to_pipard);
   unlink(from_pipard);
   return 0;

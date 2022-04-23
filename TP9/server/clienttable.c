@@ -79,7 +79,7 @@ void Clienttable_OpenPipes(Clienttable *self, pid_t clientpid)
   int pipeRead = open(from_pipard, O_RDONLY | O_NONBLOCK);
   int pipeWrite = open(to_pipard, O_WRONLY);  
 
-  printf("[DEBUG] Pipes are open.\n");
+  // printf("[DEBUG] Pipes are open.\n");
 
   int index = Clienttable_GetClientIndex(self, clientpid);
   self->frompipe[index] = pipeRead;

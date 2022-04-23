@@ -85,8 +85,11 @@ int Process_GetIndexOfClientPid(Process *self, pid_t clientpid)
 void Process_WriteCommandToPipe(Process *self, int index, int clientpipe)
 {
   char sentence[MAX_COMMAND_SIZE];
-  sprintf(sentence, "%d_%s", index, self->command[index]);
-  write(clientpipe, sentence, strlen(sentence));
+  sprintf(sentence, "%d", index);
+  write(clientpipe, sentence, sizeof(sentence)); 
+  strcpy(sentence, self->command[index]);
+  // printf("[DEBUG] Sending command: %s \n", sentence);
+  write(clientpipe, sentence, sizeof(sentence)); 
 }
 
 //===============================================
@@ -98,6 +101,7 @@ void Process_ReadStatusFromPipe(Process *self, int clientpipe)
   read(clientpipe, sentence, sizeof(int));
   int status = atoi(sentence);
   self->status[index] = status;
+  printf("[INFO] Received answer for command %d\n",index);
 }
 
 //===============================================
@@ -111,7 +115,7 @@ void Process_PrintStatus(Process *self)
 {
   for (int i = 0; i < self->numberOfProcess; i++)
   {
-    printf("%s - %d\n", self->command[i], self->status[i]);
+    printf("%s --> %d : %s\n", self->command[i], self->status[i], strerror(self->status[i]));
   }
 }
 

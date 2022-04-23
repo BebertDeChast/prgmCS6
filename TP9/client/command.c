@@ -39,27 +39,33 @@ void Command_Reset(Command *self)
 void Command_ReadCommandFromPipe(Command *self, int pipe)
 {
   char sentence[MAX_COMMAND_SIZE];
-  read(pipe, sentence, sizeof(sentence));
   int index;
-  char command[MAX_COMMAND_SIZE];
-  sscanf(sentence, "%d_%s", &index, command);
-  printf("[DEBUG] Received from pipe : %d_%s\n", index, command);
+  read(pipe, sentence, sizeof(sentence));
+  // printf("[DEBUG] Index received : %s\n", sentence);
+  index = atoi(sentence);
   self->commandNumber = index;
-  if (index >= 0) {
-    strcpy(self->commandline, command);
+  if (index != -1)
+  {
+    char sentence2[MAX_COMMAND_SIZE];
+    read(pipe, sentence2, sizeof(sentence2));
+    strcpy(self->commandline, sentence2);
   }
 }
+
 
 //===============================================
 void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid)
 {
-  write(pipe, &self->commandNumber, sizeof(int));
-  write(pipe, &self->exitStatus, sizeof(int));
+  char sentence[sizeof(int)];
+  sprintf(sentence, "%d", self->commandNumber);
+  write(pipe, sentence, sizeof(sentence));
+  sprintf(sentence, "%d", self->exitStatus);
+  write(pipe, sentence, sizeof(sentence));
 
   union sigval value ;
   value.sival_int = 2;
   sigqueue(serverpid, SIGUSR2, value);
-  printf("[DEBUG] Sent SIGUSR2 signal with payload 2 to %d\n", serverpid);
+  // printf("[DEBUG] Sent SIGUSR2 signal with payload 2 to %d\n", serverpid);
 }
 
 //===============================================
