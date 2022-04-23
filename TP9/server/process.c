@@ -86,10 +86,10 @@ void Process_WriteCommandToPipe(Process *self, int index, int clientpipe)
 {
   char sentence[MAX_COMMAND_SIZE];
   sprintf(sentence, "%d", index);
-  write(clientpipe, sentence, sizeof(sentence)); 
+  write(clientpipe, sentence, sizeof(sentence));
   strcpy(sentence, self->command[index]);
   // printf("[DEBUG] Sending command: %s \n", sentence);
-  write(clientpipe, sentence, sizeof(sentence)); 
+  write(clientpipe, sentence, sizeof(sentence));
 }
 
 //===============================================
@@ -101,7 +101,7 @@ void Process_ReadStatusFromPipe(Process *self, int clientpipe)
   read(clientpipe, sentence, sizeof(int));
   int status = atoi(sentence);
   self->status[index] = status;
-  printf("[INFO] Received answer for command %d\n",index);
+  printf("[INFO] Received answer for command %d\n", index);
 }
 
 //===============================================

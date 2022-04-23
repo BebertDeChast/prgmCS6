@@ -5,12 +5,13 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-typedef struct Clienttable {
+typedef struct Clienttable
+{
   int capacity;
   int numberOfClients;
-  pid_t * pid;
-  int * frompipe;
-  int * topipe;
+  pid_t *pid;
+  int *frompipe;
+  int *topipe;
 } Clienttable;
 
 void Clienttable_Init(Clienttable *self);

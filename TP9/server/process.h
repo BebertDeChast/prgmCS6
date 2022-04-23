@@ -9,12 +9,13 @@
 
 typedef char Command[MAX_COMMAND_SIZE];
 
-typedef struct Process {
+typedef struct Process
+{
   int capacity;
   int numberOfProcess;
-  int * status;
-  pid_t * clientPid;
-  Command * command;
+  int *status;
+  pid_t *clientPid;
+  Command *command;
 } Process;
 
 void Process_Init(Process *self);

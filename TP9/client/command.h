@@ -4,10 +4,11 @@
 
 #define MAX_COMMAND_SIZE 256
 
-typedef struct Command {
+typedef struct Command
+{
   char commandline[MAX_COMMAND_SIZE];
   int argc;
-  char ** argv;
+  char **argv;
   int exitStatus;
   int commandNumber;
 } Command;

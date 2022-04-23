@@ -77,7 +77,7 @@ void Clienttable_OpenPipes(Clienttable *self, pid_t clientpid)
   sprintf(from_pipard, "../pipes/from%d", clientpid);
 
   int pipeRead = open(from_pipard, O_RDONLY | O_NONBLOCK);
-  int pipeWrite = open(to_pipard, O_WRONLY);  
+  int pipeWrite = open(to_pipard, O_WRONLY);
 
   // printf("[DEBUG] Pipes are open.\n");
 

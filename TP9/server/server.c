@@ -41,7 +41,7 @@ void handlerClient(int sig, siginfo_t *info, void *ctx)
     kill(pid, SIGALRM);
     // printf("[DEBUG] SIGALRM sent to %d\n", pid);
     Clienttable_OpenPipes(&clienttable, pid);
-    printf("[INFO] Client %d connected\n",pid);
+    printf("[INFO] Client %d connected\n", pid);
   }
 }
 
@@ -70,12 +70,12 @@ void handlerCommand(int sig, siginfo_t *info, void *ctx)
       }
       else
       {
-        printf("[INFO] Sending command %d to client %d\n",cmdindex,info->si_pid);
+        printf("[INFO] Sending command %d to client %d\n", cmdindex, info->si_pid);
         Process_SetCommandToClient(&process, cmdindex, info->si_pid);
         Process_WriteCommandToPipe(&process, cmdindex, pipe);
       }
       break;
-    case 2: // recoit valeur de retour 
+    case 2: // recoit valeur de retour
       // printf("[DEBUG] Result by runner %d\n",(int)info->si_pid);
       pipe = Clienttable_GetFromPipe(&clienttable, (int)info->si_pid);
       Process_ReadStatusFromPipe(&process, pipe);

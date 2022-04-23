@@ -23,12 +23,12 @@ void Command_Init(Command *self)
   self->commandNumber = -1;
 }
 
-
 //===============================================
 void Command_Reset(Command *self)
 {
-  if(self->argc){
-    for (int i=0; i<self->argc; i++)
+  if (self->argc)
+  {
+    for (int i = 0; i < self->argc; i++)
       free(self->argv[i]);
     free(self->argv);
   }
@@ -52,7 +52,6 @@ void Command_ReadCommandFromPipe(Command *self, int pipe)
   }
 }
 
-
 //===============================================
 void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid)
 {
@@ -62,7 +61,7 @@ void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid)
   sprintf(sentence, "%d", self->exitStatus);
   write(pipe, sentence, sizeof(sentence));
 
-  union sigval value ;
+  union sigval value;
   value.sival_int = 2;
   sigqueue(serverpid, SIGUSR2, value);
   // printf("[DEBUG] Sent SIGUSR2 signal with payload 2 to %d\n", serverpid);
@@ -71,7 +70,7 @@ void Command_WriteExitStatusOnPipe(Command *self, int pipe, pid_t serverpid)
 //===============================================
 void Command_AskForCommand(pid_t serverpid)
 {
-  union sigval value ;
+  union sigval value;
   value.sival_int = 1;
   sigqueue(serverpid, SIGUSR2, value);
 }
@@ -83,7 +82,8 @@ void Command_CountCommandArg(Command *self)
   char *commandlineCopy = strdup(self->commandline);
   char *ptr = strtok(commandlineCopy, " ");
 
-  while (ptr != NULL){
+  while (ptr != NULL)
+  {
     narg++;
     ptr = strtok(NULL, " ");
   }
@@ -101,9 +101,10 @@ void Command_CreateArgv(Command *self)
   *newline = '\0'; // to eliminate the newline at the end
   char *ptr = strtok(commandlineCopy, " ");
 
-  self->argv = malloc(self->argc+1 * sizeof(char *));
+  self->argv = malloc(self->argc + 1 * sizeof(char *));
 
-  for (int i=0; i<self->argc; i++){
+  for (int i = 0; i < self->argc; i++)
+  {
     self->argv[i] = strdup(ptr);
     ptr = strtok(NULL, " ");
   }
@@ -116,20 +117,24 @@ void Command_Execute(Command *self)
   pid_t p;
   int exitStatus;
 
+  p = fork();
+  if (p < 0)
+  {
+    perror("fork");
+    exit(EXIT_FAILURE);
+  }
 
-  p = fork ();
-  if (p < 0) { perror ("fork"); exit (EXIT_FAILURE); }
-
-  if (p == 0){
+  if (p == 0)
+  {
     Command_CreateArgv(self);
     printf("Executing %s", self->commandline);
-    execvp (self->argv[0], self->argv);
-    perror ("execvp");
-    exit (EXIT_FAILURE);
+    execvp(self->argv[0], self->argv);
+    perror("execvp");
+    exit(EXIT_FAILURE);
   }
 
   wait(&exitStatus);
   printf("Finish %s", self->commandline);
 
-  self->exitStatus = WEXITSTATUS (exitStatus);
+  self->exitStatus = WEXITSTATUS(exitStatus);
 }
