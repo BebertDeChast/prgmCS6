@@ -67,18 +67,21 @@ int main (int argc, char *argv[])
   printf("[DEBUG] Signal has been acquired with server !\n");
   int pipeRead = open(to_pipard, O_RDONLY | O_NONBLOCK);
   int pipeWrite = open(from_pipard, O_WRONLY);
-  printf("[DEBUG] Pipes are open, starting loop.\n read : %d \n write : %d \n", pipeRead,pipeWrite);
+  printf("[DEBUG] Pipes are open, starting loop.\n");
+  sleep(1);
   while(kill(server_pid, 0) >= 0) {
-    sleep(5);
     Command_AskForCommand(server_pid);
     Command_Reset(&command);
+    sleep(1);
     Command_ReadCommandFromPipe(&command, pipeRead);
     if (command.commandNumber >= 0) {
+      printf("[DEBUG] Executing a command :\n");
       Command_Execute(&command);
+      printf("\n[DEBUG] Finished executing command, send exit status.\n");
       Command_WriteExitStatusOnPipe(&command, pipeWrite, server_pid);
     } else {
-      sleep(10);
       printf("[DEBUG] No command received.\n");
+      sleep(10);
     }
     
   }

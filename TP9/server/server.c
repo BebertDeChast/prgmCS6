@@ -50,34 +50,33 @@ void handlerCommand(int sig, siginfo_t *info, void *ctx)
   printf("[DEBUG] SIGUSR2 received.\n");
   if (info->si_code == SI_QUEUE)
   {
-    int clientIndex;
     int pipe;
-    printf("[DEBUG] Payload received : %d\n", info->si_value.sival_int);
+    // printf("[DEBUG] Payload received : %d\n", info->si_value.sival_int);
     switch (info->si_value.sival_int)
     {
     case 1: // demande de commande
-      clientIndex = Clienttable_GetClientIndex(&clienttable, (int)info->si_pid);
-      pipe = Clienttable_GetToPipe(&clienttable, clientIndex);
+      printf("[DEBUG] Asked for command by runner %d\n",(int)info->si_pid);
+      pipe = Clienttable_GetToPipe(&clienttable, (int)info->si_pid);
 
       int cmdindex = Process_GetIndexOfUnattributedCommand(&process);
       if (cmdindex == -1)
       {
-        printf("[DEBUG] No command to send...\n");
-        char dummy[1024];
-        sprintf(dummy, "-1_notacommand\0");
-        printf("[DEBUG] Sending : %s to pipe %d \n", dummy, pipe);
+        // printf("[DEBUG] No command to send\n");
+        char dummy[8];
+        sprintf(dummy, "-1_abcd");
+        // printf("[DEBUG] Sending : %s to pipe %d \n", dummy, pipe);
         write(pipe, dummy, sizeof(dummy));
       }
       else
       {
-        printf("[DEBUG] Sending command...\n");
+        printf("[DEBUG] Sending command\n");
         Process_SetCommandToClient(&process, cmdindex, info->si_pid);
         Process_WriteCommandToPipe(&process, cmdindex, pipe);
       }
       break;
     case 2: // recoit valeur de retour 
-      clientIndex = Clienttable_GetClientIndex(&clienttable, (int)info->si_pid);
-      pipe = Clienttable_GetFromPipe(&clienttable, clientIndex);
+      printf("[DEBUG] Result by runner %d\n",(int)info->si_pid);
+      pipe = Clienttable_GetFromPipe(&clienttable, (int)info->si_pid);
       Process_ReadStatusFromPipe(&process, pipe);
       break;
     }
@@ -99,17 +98,11 @@ int main()
   while (fgets(cmd, MAX_COMMAND_SIZE, stdin) != NULL)
   {
     cmd[strlen(cmd) - 1] = '\0'; // ! Removed the 'ENTER' character registered upon validation of the command
-    // DEBUG
     sleep(1);
-    printf("[DEBUG] Command received : \n[DEBUG] %s\n[DEBUG]---\n", cmd);
-    // DEBUG
-    if (strlen(cmd) <= 0)
-    {
-      Process_PrintStatus(&process);
-      exit(0);
-    }
+    printf("[DEBUG] Command added : \n[DEBUG] %s\n[DEBUG]---\n", cmd);
     Process_AddCommand(&process, cmd);
     printf("[DEBUG] Awaiting for a new command...\n");
   };
+  Process_PrintStatus(&process);
   return 0;
 }
